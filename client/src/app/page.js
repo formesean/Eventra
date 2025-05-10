@@ -1,6 +1,8 @@
 // app/page.js
 import Image from 'next/image';
 import Link from 'next/link';
+import { Button } from "../components/ui/button";
+
 const HomePage = () => {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-900 to-purple-900 text-white overflow-hidden">
@@ -14,6 +16,7 @@ const HomePage = () => {
         </button>
         </Link>
       </div>
+      <Button variant="outline">Button</Button>
 
       {/* Main content */}
       <div className="flex items-center justify-between px-12 py-24">
