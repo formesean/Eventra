@@ -1,7 +1,7 @@
 // app/page.js
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from "../components/ui/button";
+
 
 const HomePage = () => {
   return (
@@ -16,7 +16,7 @@ const HomePage = () => {
         </button>
         </Link>
       </div>
-      <Button variant="outline">Button</Button>
+      
 
       {/* Main content */}
       <div className="flex items-center justify-between px-12 py-24">
