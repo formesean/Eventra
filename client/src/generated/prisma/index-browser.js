@@ -136,6 +136,10 @@ exports.Prisma.EventScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   location: 'location',
+  day: 'day',
+  time: 'time',
+  organizer: 'organizer',
+  attendees: 'attendees',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -158,7 +162,10 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
 exports.Prisma.EventOrderByRelevanceFieldEnum = {
   name: 'name',
   description: 'description',
-  location: 'location'
+  location: 'location',
+  day: 'day',
+  time: 'time',
+  organizer: 'organizer'
 };
 
 

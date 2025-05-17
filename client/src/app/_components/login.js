@@ -2,22 +2,30 @@
 
 import { useSession, signIn, signOut } from "next-auth/react";
 
-export default function AuthStatus() {
+export default function Login() {
   const { data: session } = useSession();
 
   if (session) {
     return (
-      <div>
-        Signed in as {session.user?.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </div>
+      <>
+        <button
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="px-4 py-1.5 bg-gray-800 border border-gray-600 rounded-full hover:bg-gray-700 transition hover:cursor-pointer"
+        >
+          Sign out
+        </button>
+      </>
     );
   }
 
   return (
     <>
-      Not signed in <br />
-      <button onClick={() => signIn("google")}>Sign in with Google</button>
+      <button
+        onClick={() => signIn("google", { callbackUrl: "/event_page" })}
+        className="px-4 py-1.5 bg-gray-800 border border-gray-600 rounded-full hover:bg-gray-700 transition hover:cursor-pointer"
+      >
+        Sign In
+      </button>
     </>
   );
 }

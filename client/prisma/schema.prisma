@@ -31,10 +31,12 @@ model Event {
   startDate   DateTime
   endDate     DateTime
   location    String?
+  day         String
+  time        String
+  organizer   String
+  attendees   Int
 
-  // Define a relation to the User model
-  user User @relation(fields: [userId], references: [id])
-
+  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
