@@ -24,17 +24,23 @@ model User {
 }
 
 model Event {
-  id          Int      @id @default(autoincrement())
-  userId      Int
-  name        String
-  description String?
-  startDate   DateTime
-  endDate     DateTime
-  location    String?
-  day         String
-  time        String
-  organizer   String
-  attendees   Int
+  id               Int      @id @default(autoincrement())
+  userId           Int
+  name             String
+  description      String?
+  startDate        DateTime
+  endDate          DateTime
+  startTime        String
+  endTime          String
+  timezone         String?
+  location         String?
+  organizer        String
+  attendees        Int
+  hasTickets       Boolean  @default(false)
+  requiresApproval Boolean  @default(false)
+  hasCapacity      Boolean  @default(false)
+  isFree           Boolean  @default(true)
+  capacity         String?
 
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())

@@ -12,7 +12,7 @@ const handler = NextAuth({
   callbacks: {
     async signIn({ user, account, profile }) {
       // Send user data to your PHP backend
-      await fetch("http://localhost/server/saveUser.php", {
+      await fetch("http://localhost/server/user.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

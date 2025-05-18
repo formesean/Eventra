@@ -1994,11 +1994,17 @@ export namespace Prisma {
     description: string | null
     startDate: Date | null
     endDate: Date | null
+    startTime: string | null
+    endTime: string | null
+    timezone: string | null
     location: string | null
-    day: string | null
-    time: string | null
     organizer: string | null
     attendees: number | null
+    hasTickets: boolean | null
+    requiresApproval: boolean | null
+    hasCapacity: boolean | null
+    isFree: boolean | null
+    capacity: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2010,11 +2016,17 @@ export namespace Prisma {
     description: string | null
     startDate: Date | null
     endDate: Date | null
+    startTime: string | null
+    endTime: string | null
+    timezone: string | null
     location: string | null
-    day: string | null
-    time: string | null
     organizer: string | null
     attendees: number | null
+    hasTickets: boolean | null
+    requiresApproval: boolean | null
+    hasCapacity: boolean | null
+    isFree: boolean | null
+    capacity: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2026,11 +2038,17 @@ export namespace Prisma {
     description: number
     startDate: number
     endDate: number
+    startTime: number
+    endTime: number
+    timezone: number
     location: number
-    day: number
-    time: number
     organizer: number
     attendees: number
+    hasTickets: number
+    requiresApproval: number
+    hasCapacity: number
+    isFree: number
+    capacity: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2056,11 +2074,17 @@ export namespace Prisma {
     description?: true
     startDate?: true
     endDate?: true
+    startTime?: true
+    endTime?: true
+    timezone?: true
     location?: true
-    day?: true
-    time?: true
     organizer?: true
     attendees?: true
+    hasTickets?: true
+    requiresApproval?: true
+    hasCapacity?: true
+    isFree?: true
+    capacity?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2072,11 +2096,17 @@ export namespace Prisma {
     description?: true
     startDate?: true
     endDate?: true
+    startTime?: true
+    endTime?: true
+    timezone?: true
     location?: true
-    day?: true
-    time?: true
     organizer?: true
     attendees?: true
+    hasTickets?: true
+    requiresApproval?: true
+    hasCapacity?: true
+    isFree?: true
+    capacity?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2088,11 +2118,17 @@ export namespace Prisma {
     description?: true
     startDate?: true
     endDate?: true
+    startTime?: true
+    endTime?: true
+    timezone?: true
     location?: true
-    day?: true
-    time?: true
     organizer?: true
     attendees?: true
+    hasTickets?: true
+    requiresApproval?: true
+    hasCapacity?: true
+    isFree?: true
+    capacity?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2191,11 +2227,17 @@ export namespace Prisma {
     description: string | null
     startDate: Date
     endDate: Date
+    startTime: string
+    endTime: string
+    timezone: string | null
     location: string | null
-    day: string
-    time: string
     organizer: string
     attendees: number
+    hasTickets: boolean
+    requiresApproval: boolean
+    hasCapacity: boolean
+    isFree: boolean
+    capacity: string | null
     createdAt: Date
     updatedAt: Date
     _count: EventCountAggregateOutputType | null
@@ -2226,11 +2268,17 @@ export namespace Prisma {
     description?: boolean
     startDate?: boolean
     endDate?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    timezone?: boolean
     location?: boolean
-    day?: boolean
-    time?: boolean
     organizer?: boolean
     attendees?: boolean
+    hasTickets?: boolean
+    requiresApproval?: boolean
+    hasCapacity?: boolean
+    isFree?: boolean
+    capacity?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2245,16 +2293,22 @@ export namespace Prisma {
     description?: boolean
     startDate?: boolean
     endDate?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    timezone?: boolean
     location?: boolean
-    day?: boolean
-    time?: boolean
     organizer?: boolean
     attendees?: boolean
+    hasTickets?: boolean
+    requiresApproval?: boolean
+    hasCapacity?: boolean
+    isFree?: boolean
+    capacity?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "description" | "startDate" | "endDate" | "location" | "day" | "time" | "organizer" | "attendees" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "description" | "startDate" | "endDate" | "startTime" | "endTime" | "timezone" | "location" | "organizer" | "attendees" | "hasTickets" | "requiresApproval" | "hasCapacity" | "isFree" | "capacity" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -2271,11 +2325,17 @@ export namespace Prisma {
       description: string | null
       startDate: Date
       endDate: Date
+      startTime: string
+      endTime: string
+      timezone: string | null
       location: string | null
-      day: string
-      time: string
       organizer: string
       attendees: number
+      hasTickets: boolean
+      requiresApproval: boolean
+      hasCapacity: boolean
+      isFree: boolean
+      capacity: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["event"]>
@@ -2654,11 +2714,17 @@ export namespace Prisma {
     readonly description: FieldRef<"Event", 'String'>
     readonly startDate: FieldRef<"Event", 'DateTime'>
     readonly endDate: FieldRef<"Event", 'DateTime'>
+    readonly startTime: FieldRef<"Event", 'String'>
+    readonly endTime: FieldRef<"Event", 'String'>
+    readonly timezone: FieldRef<"Event", 'String'>
     readonly location: FieldRef<"Event", 'String'>
-    readonly day: FieldRef<"Event", 'String'>
-    readonly time: FieldRef<"Event", 'String'>
     readonly organizer: FieldRef<"Event", 'String'>
     readonly attendees: FieldRef<"Event", 'Int'>
+    readonly hasTickets: FieldRef<"Event", 'Boolean'>
+    readonly requiresApproval: FieldRef<"Event", 'Boolean'>
+    readonly hasCapacity: FieldRef<"Event", 'Boolean'>
+    readonly isFree: FieldRef<"Event", 'Boolean'>
+    readonly capacity: FieldRef<"Event", 'String'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
     readonly updatedAt: FieldRef<"Event", 'DateTime'>
   }
@@ -3054,11 +3120,17 @@ export namespace Prisma {
     description: 'description',
     startDate: 'startDate',
     endDate: 'endDate',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    timezone: 'timezone',
     location: 'location',
-    day: 'day',
-    time: 'time',
     organizer: 'organizer',
     attendees: 'attendees',
+    hasTickets: 'hasTickets',
+    requiresApproval: 'requiresApproval',
+    hasCapacity: 'hasCapacity',
+    isFree: 'isFree',
+    capacity: 'capacity',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -3093,10 +3165,12 @@ export namespace Prisma {
   export const EventOrderByRelevanceFieldEnum: {
     name: 'name',
     description: 'description',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    timezone: 'timezone',
     location: 'location',
-    day: 'day',
-    time: 'time',
-    organizer: 'organizer'
+    organizer: 'organizer',
+    capacity: 'capacity'
   };
 
   export type EventOrderByRelevanceFieldEnum = (typeof EventOrderByRelevanceFieldEnum)[keyof typeof EventOrderByRelevanceFieldEnum]
@@ -3125,6 +3199,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -3206,11 +3287,17 @@ export namespace Prisma {
     description?: StringNullableFilter<"Event"> | string | null
     startDate?: DateTimeFilter<"Event"> | Date | string
     endDate?: DateTimeFilter<"Event"> | Date | string
+    startTime?: StringFilter<"Event"> | string
+    endTime?: StringFilter<"Event"> | string
+    timezone?: StringNullableFilter<"Event"> | string | null
     location?: StringNullableFilter<"Event"> | string | null
-    day?: StringFilter<"Event"> | string
-    time?: StringFilter<"Event"> | string
     organizer?: StringFilter<"Event"> | string
     attendees?: IntFilter<"Event"> | number
+    hasTickets?: BoolFilter<"Event"> | boolean
+    requiresApproval?: BoolFilter<"Event"> | boolean
+    hasCapacity?: BoolFilter<"Event"> | boolean
+    isFree?: BoolFilter<"Event"> | boolean
+    capacity?: StringNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -3223,11 +3310,17 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    timezone?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
-    day?: SortOrder
-    time?: SortOrder
     organizer?: SortOrder
     attendees?: SortOrder
+    hasTickets?: SortOrder
+    requiresApproval?: SortOrder
+    hasCapacity?: SortOrder
+    isFree?: SortOrder
+    capacity?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -3244,11 +3337,17 @@ export namespace Prisma {
     description?: StringNullableFilter<"Event"> | string | null
     startDate?: DateTimeFilter<"Event"> | Date | string
     endDate?: DateTimeFilter<"Event"> | Date | string
+    startTime?: StringFilter<"Event"> | string
+    endTime?: StringFilter<"Event"> | string
+    timezone?: StringNullableFilter<"Event"> | string | null
     location?: StringNullableFilter<"Event"> | string | null
-    day?: StringFilter<"Event"> | string
-    time?: StringFilter<"Event"> | string
     organizer?: StringFilter<"Event"> | string
     attendees?: IntFilter<"Event"> | number
+    hasTickets?: BoolFilter<"Event"> | boolean
+    requiresApproval?: BoolFilter<"Event"> | boolean
+    hasCapacity?: BoolFilter<"Event"> | boolean
+    isFree?: BoolFilter<"Event"> | boolean
+    capacity?: StringNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -3261,11 +3360,17 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    timezone?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
-    day?: SortOrder
-    time?: SortOrder
     organizer?: SortOrder
     attendees?: SortOrder
+    hasTickets?: SortOrder
+    requiresApproval?: SortOrder
+    hasCapacity?: SortOrder
+    isFree?: SortOrder
+    capacity?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: EventCountOrderByAggregateInput
@@ -3285,11 +3390,17 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Event"> | string | null
     startDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     endDate?: DateTimeWithAggregatesFilter<"Event"> | Date | string
+    startTime?: StringWithAggregatesFilter<"Event"> | string
+    endTime?: StringWithAggregatesFilter<"Event"> | string
+    timezone?: StringNullableWithAggregatesFilter<"Event"> | string | null
     location?: StringNullableWithAggregatesFilter<"Event"> | string | null
-    day?: StringWithAggregatesFilter<"Event"> | string
-    time?: StringWithAggregatesFilter<"Event"> | string
     organizer?: StringWithAggregatesFilter<"Event"> | string
     attendees?: IntWithAggregatesFilter<"Event"> | number
+    hasTickets?: BoolWithAggregatesFilter<"Event"> | boolean
+    requiresApproval?: BoolWithAggregatesFilter<"Event"> | boolean
+    hasCapacity?: BoolWithAggregatesFilter<"Event"> | boolean
+    isFree?: BoolWithAggregatesFilter<"Event"> | boolean
+    capacity?: StringNullableWithAggregatesFilter<"Event"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
   }
@@ -3356,11 +3467,17 @@ export namespace Prisma {
     description?: string | null
     startDate: Date | string
     endDate: Date | string
+    startTime: string
+    endTime: string
+    timezone?: string | null
     location?: string | null
-    day: string
-    time: string
     organizer: string
     attendees: number
+    hasTickets?: boolean
+    requiresApproval?: boolean
+    hasCapacity?: boolean
+    isFree?: boolean
+    capacity?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutEventInput
@@ -3373,11 +3490,17 @@ export namespace Prisma {
     description?: string | null
     startDate: Date | string
     endDate: Date | string
+    startTime: string
+    endTime: string
+    timezone?: string | null
     location?: string | null
-    day: string
-    time: string
     organizer: string
     attendees: number
+    hasTickets?: boolean
+    requiresApproval?: boolean
+    hasCapacity?: boolean
+    isFree?: boolean
+    capacity?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3387,11 +3510,17 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    day?: StringFieldUpdateOperationsInput | string
-    time?: StringFieldUpdateOperationsInput | string
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    hasTickets?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    hasCapacity?: BoolFieldUpdateOperationsInput | boolean
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    capacity?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutEventNestedInput
@@ -3404,11 +3533,17 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    day?: StringFieldUpdateOperationsInput | string
-    time?: StringFieldUpdateOperationsInput | string
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    hasTickets?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    hasCapacity?: BoolFieldUpdateOperationsInput | boolean
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    capacity?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3420,11 +3555,17 @@ export namespace Prisma {
     description?: string | null
     startDate: Date | string
     endDate: Date | string
+    startTime: string
+    endTime: string
+    timezone?: string | null
     location?: string | null
-    day: string
-    time: string
     organizer: string
     attendees: number
+    hasTickets?: boolean
+    requiresApproval?: boolean
+    hasCapacity?: boolean
+    isFree?: boolean
+    capacity?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3434,11 +3575,17 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    day?: StringFieldUpdateOperationsInput | string
-    time?: StringFieldUpdateOperationsInput | string
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    hasTickets?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    hasCapacity?: BoolFieldUpdateOperationsInput | boolean
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    capacity?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3450,11 +3597,17 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    day?: StringFieldUpdateOperationsInput | string
-    time?: StringFieldUpdateOperationsInput | string
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    hasTickets?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    hasCapacity?: BoolFieldUpdateOperationsInput | boolean
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    capacity?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3630,6 +3783,11 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -3648,11 +3806,17 @@ export namespace Prisma {
     description?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    timezone?: SortOrder
     location?: SortOrder
-    day?: SortOrder
-    time?: SortOrder
     organizer?: SortOrder
     attendees?: SortOrder
+    hasTickets?: SortOrder
+    requiresApproval?: SortOrder
+    hasCapacity?: SortOrder
+    isFree?: SortOrder
+    capacity?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -3670,11 +3834,17 @@ export namespace Prisma {
     description?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    timezone?: SortOrder
     location?: SortOrder
-    day?: SortOrder
-    time?: SortOrder
     organizer?: SortOrder
     attendees?: SortOrder
+    hasTickets?: SortOrder
+    requiresApproval?: SortOrder
+    hasCapacity?: SortOrder
+    isFree?: SortOrder
+    capacity?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -3686,11 +3856,17 @@ export namespace Prisma {
     description?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    timezone?: SortOrder
     location?: SortOrder
-    day?: SortOrder
-    time?: SortOrder
     organizer?: SortOrder
     attendees?: SortOrder
+    hasTickets?: SortOrder
+    requiresApproval?: SortOrder
+    hasCapacity?: SortOrder
+    isFree?: SortOrder
+    capacity?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -3699,6 +3875,14 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     attendees?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EventCreateNestedManyWithoutUserInput = {
@@ -3767,6 +3951,10 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutEventInput, UserUncheckedCreateWithoutEventInput>
     connectOrCreate?: UserCreateOrConnectWithoutEventInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type UserUpdateOneRequiredWithoutEventNestedInput = {
@@ -3917,16 +4105,35 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type EventCreateWithoutUserInput = {
     name: string
     description?: string | null
     startDate: Date | string
     endDate: Date | string
+    startTime: string
+    endTime: string
+    timezone?: string | null
     location?: string | null
-    day: string
-    time: string
     organizer: string
     attendees: number
+    hasTickets?: boolean
+    requiresApproval?: boolean
+    hasCapacity?: boolean
+    isFree?: boolean
+    capacity?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3937,11 +4144,17 @@ export namespace Prisma {
     description?: string | null
     startDate: Date | string
     endDate: Date | string
+    startTime: string
+    endTime: string
+    timezone?: string | null
     location?: string | null
-    day: string
-    time: string
     organizer: string
     attendees: number
+    hasTickets?: boolean
+    requiresApproval?: boolean
+    hasCapacity?: boolean
+    isFree?: boolean
+    capacity?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3982,11 +4195,17 @@ export namespace Prisma {
     description?: StringNullableFilter<"Event"> | string | null
     startDate?: DateTimeFilter<"Event"> | Date | string
     endDate?: DateTimeFilter<"Event"> | Date | string
+    startTime?: StringFilter<"Event"> | string
+    endTime?: StringFilter<"Event"> | string
+    timezone?: StringNullableFilter<"Event"> | string | null
     location?: StringNullableFilter<"Event"> | string | null
-    day?: StringFilter<"Event"> | string
-    time?: StringFilter<"Event"> | string
     organizer?: StringFilter<"Event"> | string
     attendees?: IntFilter<"Event"> | number
+    hasTickets?: BoolFilter<"Event"> | boolean
+    requiresApproval?: BoolFilter<"Event"> | boolean
+    hasCapacity?: BoolFilter<"Event"> | boolean
+    isFree?: BoolFilter<"Event"> | boolean
+    capacity?: StringNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
   }
@@ -4043,11 +4262,17 @@ export namespace Prisma {
     description?: string | null
     startDate: Date | string
     endDate: Date | string
+    startTime: string
+    endTime: string
+    timezone?: string | null
     location?: string | null
-    day: string
-    time: string
     organizer: string
     attendees: number
+    hasTickets?: boolean
+    requiresApproval?: boolean
+    hasCapacity?: boolean
+    isFree?: boolean
+    capacity?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -4057,11 +4282,17 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    day?: StringFieldUpdateOperationsInput | string
-    time?: StringFieldUpdateOperationsInput | string
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    hasTickets?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    hasCapacity?: BoolFieldUpdateOperationsInput | boolean
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    capacity?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4072,11 +4303,17 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    day?: StringFieldUpdateOperationsInput | string
-    time?: StringFieldUpdateOperationsInput | string
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    hasTickets?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    hasCapacity?: BoolFieldUpdateOperationsInput | boolean
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    capacity?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -4087,11 +4324,17 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
-    day?: StringFieldUpdateOperationsInput | string
-    time?: StringFieldUpdateOperationsInput | string
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    hasTickets?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    hasCapacity?: BoolFieldUpdateOperationsInput | boolean
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    capacity?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
