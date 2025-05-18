@@ -19,7 +19,7 @@ const HomePage = () => {
       
 
       {/* Main content */}
-      <div className="flex items-center justify-between px-12 py-24">
+      <div className="flex items-center justify-between px-12 py-24 ml-40">
         {/* Left Text Content */}
         <div className="max-w-xl">
           <div className="text-lg font-medium">Eventra</div>

@@ -1,16 +1,60 @@
 // app/page.js
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ToggleGroup, ToggleGroupItem } from '../../components/ui/toggle-group';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../../components/ui/card';
-import { BellIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { BellIcon, UserCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 export default function EventPage() {
   // State for active tab selection
   const [activeTab, setActiveTab] = useState('upcoming');
-  
-  // Event data with both upcoming and past events
+  const [showNotifications, setShowNotifications] = useState(false);
+  const notificationsRef = useRef(null);
+
+  // Sample notification data 
+  const notifications = [
+    {
+      id: 1,
+      title: 'New event invitation',
+      message: 'You have been invited to "Tech Conference 2023"',
+      time: '2 hours ago',
+      read: false
+    },
+    {
+      id: 2,
+      title: 'Event reminder',
+      message: 'Your event "Team Meeting" starts in 30 minutes',
+      time: '1 day ago',
+      read: true
+    },
+    {
+      id: 3,
+      title: 'New message',
+      message: 'You have 3 new messages in the event chat',
+      time: '3 days ago',
+      read: true
+    }
+  ];
+
+  // Close notifications when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+        // Check if the click was not on the bell icon
+        if (!event.target.closest('.bell-icon')) {
+          setShowNotifications(false);
+        }
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Event sample data with both upcoming and past events 
   const events = {
     upcoming: [
       {
@@ -51,7 +95,7 @@ export default function EventPage() {
     ]
   };
 
-  // Reusable Event Card Component
+  // Reusable Event Card Component 
   const EventCard = ({ event }) => (
     <Card className="bg-gray-800 border-gray-700 transition-all duration-300 hover:border-gray-600">
       <CardHeader>
@@ -77,7 +121,7 @@ export default function EventPage() {
     </Card>
   );
 
-  // Empty State Component
+  // Empty State Component 
   const EmptyState = ({ type }) => (
     <Card className="bg-gray-800 border-gray-700 text-center">
       <CardContent className="py-8">
@@ -110,7 +154,7 @@ export default function EventPage() {
         </p>
         {type === 'upcoming' && (
           <Link
-            href="/events/create"
+            href="/create_page"
             className="inline-flex items-center px-4 py-2 bg-white text-gray-900 rounded-md text-sm font-medium hover:bg-gray-100"
           >
             Create Event
@@ -127,24 +171,79 @@ export default function EventPage() {
         <div className="flex justify-between h-16 items-center max-w-7xl mx-auto">
           <Link href="/" className="text-xl font-bold text-white">Eventra</Link>
           
-          {/* Main Navigation Links */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="#" className="text-white hover:text-gray-300 text-sm font-medium">Events</Link>
-            <Link href="#" className="text-gray-300 hover:text-white text-sm font-medium">Calendars</Link>
-            <Link href="#" className="text-gray-300 hover:text-white text-sm font-medium">Discover</Link>
-          </div>
-          
           {/* Action Buttons */}
           <div className="flex items-center space-x-6">
             <Link 
-              href="/events/create" 
+              href="/create_page" 
               className="text-gray-300 hover:text-white text-sm font-medium flex items-center"
             >
               Create New
             </Link>
-            <button className="text-gray-300 hover:text-white">
-              <BellIcon className="h-5 w-5" />
-            </button>
+            
+            {/* Notification Button and Popup */}
+            <div className="relative" ref={notificationsRef}>
+              <button 
+                className="text-gray-300 hover:text-white bell-icon"
+                onClick={() => setShowNotifications(!showNotifications)}
+              >
+                <BellIcon className="h-5 w-5" />
+                {/* Notification badge */}
+                {notifications.some(n => !n.read) && (
+                  <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500"></span>
+                )}
+              </button>
+              
+              {/* Notification Popup */}
+              {showNotifications && (
+                <>
+                  {/* Blur backdrop */}
+                  <div className="fixed inset-0 bg-transparent bg-opacity-30  z-40"></div>
+                  
+                  {/* Popup content */}
+                  <div className="fixed right-4 sm:right-8 top-20 z-50 w-80 bg-gray-800 backdrop-blur-sm rounded-lg shadow-xl border border-gray-700 overflow-hidden">
+                    <div className="p-4 border-b border-gray-700 flex justify-between items-center">
+                      <h3 className="font-medium text-white">Notifications</h3>
+                      <button 
+                        onClick={() => setShowNotifications(false)}
+                        className="text-gray-400 hover:text-white"
+                      >
+                        <XMarkIcon className="h-5 w-5" />
+                      </button>
+                    </div>
+                    
+                    <div className="max-h-96 overflow-y-auto">
+                      {notifications.length > 0 ? (
+                        notifications.map(notification => (
+                          <div 
+                            key={notification.id} 
+                            className={`p-4 border-b border-gray-700 hover:bg-gray-700/50 cursor-pointer transition-colors ${
+                              !notification.read ? 'bg-gray-700/30' : ''
+                            }`}
+                          >
+                            <div className="flex justify-between items-start">
+                              <h4 className="font-medium text-white">{notification.title}</h4>
+                              <span className="text-xs text-gray-400">{notification.time}</span>
+                            </div>
+                            <p className="text-sm text-gray-300 mt-1">{notification.message}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="p-8 text-center text-gray-400">
+                          No new notifications
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="p-3 border-t border-gray-700 text-center">
+                      <button className="text-sm text-blue-400 hover:text-blue-300">
+                        Mark all as read
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+            
             <button className="text-gray-300 hover:text-white">
               <UserCircleIcon className="h-5 w-5" />
             </button>
@@ -158,53 +257,51 @@ export default function EventPage() {
           <h1 className="text-2xl font-bold text-white mb-6">Events</h1>
           
           {/* Enhanced Toggle Slider */}
-        <div className="relative mb-8">
-  <ToggleGroup
-    type="single"
-    value={activeTab}
-    onValueChange={(value) => value && setActiveTab(value)}
-    className="relative bg-gray-800/50 p-1 text-white rounded-lg w-67 h-10 border border-gray-700"
-  >
-    {/* Transparent Gray Slider */}
-    <div className={`
-      absolute top-1 left-1 h-8 bg-gray-700/30 rounded-md 
-      transition-all duration-300 ease-out 
-      ${activeTab === 'upcoming' ? 'translate-x-0 w-32' : 'translate-x-[8rem] w-32'}
-    `} />
+          <div className="relative mb-8">
+            <ToggleGroup
+              type="single"
+              value={activeTab}
+              onValueChange={(value) => value && setActiveTab(value)}
+              className="relative bg-gray-800/50 p-1 text-white rounded-lg w-67 h-10 border border-gray-700"
+            >
+              {/* Transparent Gray Slider */}
+              <div className={`
+                absolute top-1 left-1 h-8 bg-gray-700/30 rounded-md 
+                transition-all duration-300 ease-out 
+                ${activeTab === 'upcoming' ? 'translate-x-0 w-32' : 'translate-x-[8rem] w-32'}
+              `} />
 
-    <ToggleGroupItem
-      value="upcoming"
-      className={`
-        relative z-10 w-32 h-8 rounded-md
-        ${activeTab === 'upcoming' ? 'text-white' : 'text-gray-400'}
-        bg-transparent border-0 hover:bg-transparent 
-        data-[state=on]:bg-transparent 
-        data-[state=on]:text-white
-        data-[state=off]:bg-transparent 
-        hover:text-white transition-colors duration-200
-      `}
-    >
-      Upcoming
-    </ToggleGroupItem>
+              <ToggleGroupItem
+                value="upcoming"
+                className={`
+                  relative z-10 w-32 h-8 rounded-md
+                  ${activeTab === 'upcoming' ? 'text-white' : 'text-gray-400'}
+                  bg-transparent border-0 hover:bg-transparent 
+                  data-[state=on]:bg-transparent 
+                  data-[state=on]:text-white
+                  data-[state=off]:bg-transparent 
+                  hover:text-white transition-colors duration-200
+                `}
+              >
+                Upcoming
+              </ToggleGroupItem>
 
-    <ToggleGroupItem
-      value="past"
-      className={`
-        relative z-10 w-32 h-8 rounded-md
-        ${activeTab === 'past' ? 'text-white' : 'text-gray-400'}
-        bg-transparent border-0 hover:bg-transparent
-        data-[state=on]:bg-transparent
-        data-[state=on]:text-white
-        data-[state=off]:bg-transparent
-        hover:text-white transition-colors duration-200
-      `}
-    >
-      Past
-    </ToggleGroupItem>
-  </ToggleGroup>
-</div>
-
-
+              <ToggleGroupItem
+                value="past"
+                className={`
+                  relative z-10 w-32 h-8 rounded-md
+                  ${activeTab === 'past' ? 'text-white' : 'text-gray-400'}
+                  bg-transparent border-0 hover:bg-transparent
+                  data-[state=on]:bg-transparent
+                  data-[state=on]:text-white
+                  data-[state=off]:bg-transparent
+                  hover:text-white transition-colors duration-200
+                `}
+              >
+                Past
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
 
           {/* Events List with Smooth Transitions */}
           <div className="relative min-h-[400px]">
