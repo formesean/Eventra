@@ -45,16 +45,13 @@ export default function EventPage() {
         const res = await fetch("/api/event");
         const data = await res.json();
         if (Array.isArray(data)) {
-          // Split events into upcoming and past
           const now = new Date();
           const upcoming = [];
           const past = [];
           data.forEach((event) => {
-            // Use endDate if available, otherwise startDate
             const eventDate = new Date(event.endDate || event.startDate);
             const startDate = new Date(event.startDate);
             const endDate = event.endDate ? new Date(event.endDate) : null;
-            // Map API fields to EventCard fields
             const mapped = {
               id: event.id,
               title: event.name,
@@ -76,7 +73,6 @@ export default function EventPage() {
               attendees: event.attendees || 0,
               description: event.description || "",
             };
-            // If event is in the future or today, it's upcoming
             if (endDate ? endDate >= now : startDate >= now) {
               upcoming.push(mapped);
             } else {
