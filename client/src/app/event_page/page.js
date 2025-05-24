@@ -196,6 +196,7 @@ export default function EventPage() {
         {type === "upcoming" && (
           <Link
             href="/create_page"
+            href="/create_page"
             className="inline-flex items-center px-4 py-2 bg-white text-gray-900 rounded-md text-sm font-medium hover:bg-gray-100"
           >
             Create Event
