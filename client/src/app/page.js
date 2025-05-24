@@ -6,7 +6,7 @@ const HomePage = () => {
       {/* Top-right navigation */}
       <div className="absolute top-4 right-6 flex items-center space-x-6 text-sm text-gray-300">
         <div>4:14 PM GMT+8</div>
-        <a href="#" className="hover:underline">
+        <a href="/event_page" className="hover:underline">
           Explore Events
         </a>
         <Login />
