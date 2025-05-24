@@ -10,7 +10,7 @@ export default function Login() {
       <>
         <button
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="px-4 py-1.5 bg-gray-800 border border-gray-600 rounded-full hover:bg-gray-700 transition hover:cursor-pointer"
+          className="px-4 py-1 text-sm bg-gray-800 border border-gray-600 rounded-full hover:bg-gray-700 transition hover:cursor-pointer"
         >
           Sign out
         </button>
@@ -22,7 +22,7 @@ export default function Login() {
     <>
       <button
         onClick={() => signIn("google", { callbackUrl: "/event_page" })}
-        className="px-4 py-1.5 bg-gray-800 border border-gray-600 rounded-full hover:bg-gray-700 transition hover:cursor-pointer"
+        className="px-4 py-1 text-sm bg-gray-800 border border-gray-600 rounded-full hover:bg-gray-700 transition hover:cursor-pointer"
       >
         Sign In
       </button>

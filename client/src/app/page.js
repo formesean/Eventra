@@ -1,11 +1,19 @@
+"use client";
+
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import Login from "./_components/login";
+import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 const HomePage = () => {
+  const { data: session } = useSession();
+
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-900 to-purple-900 text-white overflow-hidden">
       {/* Top-right navigation */}
       <div className="absolute top-4 right-6 flex items-center space-x-6 text-sm text-gray-300">
-        <div>4:14 PM GMT+8</div>
+        <ClockDisplay />
         <a href="/event_page" className="hover:underline">
           Explore Events
         </a>
@@ -28,9 +36,16 @@ const HomePage = () => {
             Set up an event page, invite friends and sell tickets. Host a
             memorable event today.
           </p>
-          <button className="bg-white text-black font-semibold px-6 py-3 rounded-md hover:bg-gray-100 transition shadow-lg">
+          <Link
+            href={
+              session
+                ? "/create_page"
+                : signIn("google", { callbackUrl: "/create_page" })
+            }
+            className="hover:cursor-pointer bg-white text-black font-semibold px-6 py-3 rounded-md hover:bg-gray-300 transition shadow-lg"
+          >
             Create Your First Event
-          </button>
+          </Link>
         </div>
 
         {/* Right Image */}
@@ -48,5 +63,30 @@ const HomePage = () => {
     </div>
   );
 };
+
+function ClockDisplay() {
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    function updateTime() {
+      const now = new Date();
+      // Convert to GMT+8
+      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+      const gmt8 = new Date(utc + 8 * 3600000);
+      setTime(
+        gmt8.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        }) + " GMT+8"
+      );
+    }
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return <div>{time}</div>;
+}
 
 export default HomePage;
