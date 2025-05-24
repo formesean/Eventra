@@ -11,7 +11,6 @@ import {
 } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import {
-  ChevronDownIcon,
   MapPinIcon,
   CalendarIcon,
   ClockIcon,
@@ -20,6 +19,7 @@ import {
   ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 import { useSession } from "next-auth/react";
+import { DateTimePicker } from "../../components/ui/datetime-picker";
 
 export default function CreateEventPage() {
   const { data: session } = useSession();
@@ -70,6 +70,40 @@ export default function CreateEventPage() {
 
     fetchUser();
   }, [session]);
+
+  useEffect(() => {
+    if (endDate <= startDate) {
+      setEndDate(new Date(startDate.getTime() + 60 * 60 * 1000));
+    }
+  }, [startDate]);
+
+  const handleStartDateTimeChange = (date) => {
+    setStartDate(date);
+    setStartTime(
+      date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      })
+    );
+
+    console.log(startDate);
+    console.log(startTime);
+  };
+
+  const handleEndDateTimeChange = (date) => {
+    setEndDate(date);
+    setEndTime(
+      date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      })
+    );
+
+    console.log(endDate);
+    console.log(endTime);
+  };
 
   async function handleCreateEvent() {
     setLoading(true);
@@ -171,33 +205,21 @@ export default function CreateEventPage() {
               <h2 className="text-white text-xl font-medium">Date & Time</h2>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <h3 className="text-gray-400 text-sm">Start Date</h3>
+                  <h3 className="text-gray-400 text-sm">Start Date & Time</h3>
                   <div className="flex items-center space-x-2 text-gray-300">
-                    <CalendarIcon className="h-5 w-5" />
-                    <span>{startDate.toDateString()}</span>
+                    <DateTimePicker
+                      value={startDate}
+                      onChange={handleStartDateTimeChange}
+                    />
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <h3 className="text-gray-400 text-sm">End Date</h3>
+                  <h3 className="text-gray-400 text-sm">End Date & Time</h3>
                   <div className="flex items-center space-x-2 text-gray-300">
-                    <CalendarIcon className="h-5 w-5" />
-                    <span>{endDate.toDateString()}</span>
-                  </div>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <h3 className="text-gray-400 text-sm">Start Time</h3>
-                  <div className="flex items-center space-x-2 text-gray-300">
-                    <ClockIcon className="h-5 w-5" />
-                    <span>{startTime}</span>
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <h3 className="text-gray-400 text-sm">End Time</h3>
-                  <div className="flex items-center space-x-2 text-gray-300">
-                    <ClockIcon className="h-5 w-5" />
-                    <span>{endTime}</span>
+                    <DateTimePicker
+                      value={endDate}
+                      onChange={handleEndDateTimeChange}
+                    />
                   </div>
                 </div>
               </div>
