@@ -5,9 +5,12 @@ import { useEffect, useState } from "react";
 import Login from "./_components/login";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { Button } from "~/components/ui/button";
+import { useRouter } from "next/navigation";
 
 const HomePage = () => {
   const { data: session } = useSession();
+  const router = useRouter();
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-900 to-purple-900 text-white overflow-hidden">
@@ -36,16 +39,18 @@ const HomePage = () => {
             Set up an event page, invite friends and sell tickets. Host a
             memorable event today.
           </p>
-          <Link
-            href={
-              session
-                ? "/create_page"
-                : signIn("google", { callbackUrl: "/create_page" })
-            }
+          <Button
+            onClick={() => {
+              if (session) {
+                router.push("/create_page");
+              } else {
+                signIn("google", { callbackUrl: "/create_page" });
+              }
+            }}
             className="hover:cursor-pointer bg-white text-black font-semibold px-6 py-3 rounded-md hover:bg-gray-300 transition shadow-lg"
           >
             Create Your First Event
-          </Link>
+          </Button>
         </div>
 
         {/* Right Image */}
