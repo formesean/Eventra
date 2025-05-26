@@ -5,7 +5,7 @@ ini_set('display_errors', 0);
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET,PUT');
+header('Access-Control-Allow-Methods: GET,PUT,DELETE');
 header('Access-Control-Allow-Headers: Content-Type, Accept');
 
 require_once 'db.php';
@@ -137,6 +137,74 @@ if ($method === 'GET') {
     echo json_encode([
       'success' => false,
       'error' => 'Failed to update status: ' . $e->getMessage()
+    ]);
+  }
+} elseif ($method === 'DELETE') {
+  $data = json_decode(file_get_contents('php://input'), true);
+
+  if (!isset($data['registrationId'])) {
+    http_response_code(400);
+    echo json_encode([
+      'success' => false,
+      'error' => 'Missing required field: registrationId'
+    ]);
+    exit;
+  }
+
+  try {
+    $pdo->beginTransaction();
+
+    // Get registration details before deletion
+    $currentStatusQuery = $pdo->prepare("
+      SELECT status, eventId
+      FROM registration
+      WHERE id = :registrationId
+    ");
+    $currentStatusQuery->execute([':registrationId' => $data['registrationId']]);
+    $currentRegistration = $currentStatusQuery->fetch(PDO::FETCH_ASSOC);
+
+    if (!$currentRegistration) {
+      throw new Exception('Registration not found');
+    }
+
+    $status = $currentRegistration['status'];
+    $eventId = $currentRegistration['eventId'];
+
+    // Map status values to database column names
+    $statusColumnMap = [
+      'going' => 'goingCount',
+      'maybe' => 'maybeCount',
+      'not-going' => 'notGoingCount'
+    ];
+
+    // Delete the registration
+    $deleteQuery = $pdo->prepare("
+      DELETE FROM registration
+      WHERE id = :registrationId
+    ");
+    $deleteQuery->execute([':registrationId' => $data['registrationId']]);
+
+    // Update event counts
+    $updateQuery = $pdo->prepare("
+      UPDATE event
+      SET {$statusColumnMap[$status]} = {$statusColumnMap[$status]} - 1,
+          attendees = attendees - 1
+      WHERE id = :eventId
+    ");
+    $updateQuery->execute([':eventId' => $eventId]);
+
+    $pdo->commit();
+
+    echo json_encode([
+      'success' => true,
+      'message' => 'Registration deleted successfully'
+    ]);
+  } catch (Exception $e) {
+    $pdo->rollBack();
+    http_response_code(500);
+    echo json_encode([
+      'success' => false,
+      'error' => 'Failed to delete registration: ' . $e->getMessage()
     ]);
   }
 } else {

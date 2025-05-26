@@ -189,6 +189,43 @@ elseif ($method === 'PUT') {
   }
 }
 
+elseif ($method === 'DELETE') {
+  // Delete an event
+  $id = $_GET['id'] ?? null;
+
+  if (!$id) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Missing event ID']);
+    exit;
+  }
+
+  try {
+    // First check if event exists
+    $eventCheck = $pdo->prepare("SELECT id FROM event WHERE id = :id");
+    $eventCheck->execute([':id' => $id]);
+    if (!$eventCheck->fetch()) {
+      http_response_code(404);
+      echo json_encode(['error' => 'Event not found']);
+      exit;
+    }
+
+    // Delete the event
+    $stmt = $pdo->prepare("DELETE FROM event WHERE id = :id");
+    $result = $stmt->execute([':id' => $id]);
+
+    if ($result) {
+      http_response_code(200);
+      echo json_encode(['message' => 'Event deleted successfully']);
+    } else {
+      http_response_code(500);
+      echo json_encode(['error' => 'Failed to delete event']);
+    }
+  } catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode(['error' => $e->getMessage()]);
+  }
+}
+
 else {
   http_response_code(405);
   echo json_encode(['error' => 'Method not allowed']);
