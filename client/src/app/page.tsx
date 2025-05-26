@@ -1,11 +1,20 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Login from "./_components/login";
 import { signIn } from "next-auth/react";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 const HomePage = () => {
   const { data: session } = useSession();
@@ -14,12 +23,44 @@ const HomePage = () => {
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-900 to-purple-900 text-white overflow-hidden">
       {/* Top-right navigation */}
-      <div className="absolute top-4 right-6 flex items-center space-x-6 text-sm text-gray-300">
+      <div className="absolute top-6 right-20 flex items-center space-x-6 text-sm text-gray-300">
         <ClockDisplay />
         <a href="/event" className="hover:underline">
           Explore Events
         </a>
-        <Login />
+        {session ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <UserCircleIcon className="h-7 w-7 text-gray-300 hover:text-white hover:cursor-pointer" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-56 bg-gray-800 border-gray-700"
+              align="end"
+            >
+              <DropdownMenuLabel className="text-white">
+                {session.user?.name}
+              </DropdownMenuLabel>
+              <DropdownMenuLabel className="text-gray-400 text-sm font-normal">
+                {session.user?.email}
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator className="bg-gray-700" />
+              <DropdownMenuItem
+                className="text-red-400 hover:text-red-300 hover:bg-gray-700 cursor-pointer"
+                onClick={() => signOut()}
+              >
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Button
+            variant="ghost"
+            onClick={() => router.push("/login")}
+            className="text-gray-300 hover:text-white"
+          >
+            Sign in
+          </Button>
+        )}
       </div>
 
       {/* Main content */}

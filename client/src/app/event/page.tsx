@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ToggleGroup, ToggleGroupItem } from "../../components/ui/toggle-group";
 import {
@@ -12,9 +12,17 @@ import {
   CardDescription,
   CardContent,
 } from "../../components/ui/card";
-import Login from "../_components/login";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../../components/ui/dropdown-menu";
 import { Button } from "../../components/ui/button";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
 
 type EventItem = {
   id: any;
@@ -180,7 +188,7 @@ export default function EventPage() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center justify-center space-x-6">
             <Link
               href="/create"
               className="text-gray-300 hover:text-white text-sm font-medium flex items-center"
@@ -188,7 +196,39 @@ export default function EventPage() {
               Create New
             </Link>
 
-            <Login />
+            {session ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <UserCircleIcon className="h-7 w-7 text-gray-300 hover:text-white hover:cursor-pointer" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-56 bg-gray-800 border-gray-700"
+                  align="end"
+                >
+                  <DropdownMenuLabel className="text-white">
+                    {session.user?.name}
+                  </DropdownMenuLabel>
+                  <DropdownMenuLabel className="text-gray-400 text-sm font-normal">
+                    {session.user?.email}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-gray-700" />
+                  <DropdownMenuItem
+                    className="text-red-400 hover:text-red-300 hover:bg-gray-700 cursor-pointer"
+                    onClick={() => signOut()}
+                  >
+                    Sign out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button
+                variant="ghost"
+                onClick={() => router.push("/login")}
+                className="text-gray-300 hover:text-white"
+              >
+                Sign in
+              </Button>
+            )}
           </div>
         </div>
       </nav>
