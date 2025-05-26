@@ -10,6 +10,7 @@ import {
   PhoneIcon,
 } from "@heroicons/react/24/outline";
 import { Button } from "~/components/ui/button";
+import { sendEmail } from "~/lib/sendEmail";
 
 interface RegistrationModalProps {
   isOpen: boolean;
@@ -80,6 +81,82 @@ export default function RegistrationModal({
 
       if (!response.ok) {
         throw new Error(data.message || "Registration failed");
+      }
+
+      // Fetch event details to get organizer's email
+      const eventResponse = await fetch(`/api/event?id=${eventId}`);
+      const eventData = await eventResponse.json();
+      const event = Array.isArray(eventData) ? eventData[0] : eventData;
+
+      // Fetch organizer's email
+      const organizerResponse = await fetch(`/api/user?id=${event.userId}`);
+      const organizerData = await organizerResponse.json();
+      const organizerEmail = organizerData[0].email;
+
+      // Send email to organizer
+      try {
+        await sendEmail(
+          `New Registration for ${eventName}`,
+          event.organizer,
+          `
+            A new registration has been received for your event!
+
+            Registrant Details:
+            Name: ${formData.fullName}
+            Email: ${formData.email}
+            ${
+              formData.contactNumber
+                ? `Contact Number: ${formData.contactNumber}`
+                : ""
+            }
+
+            Event Details:
+            Name: ${eventName}
+            Date: ${new Date(event.startDate).toLocaleDateString()}
+            Time: ${event.startTime}
+            Location: ${event.location}
+
+            You can manage registrations at: http://localhost:3000/event/${eventId}/manage
+          `,
+          organizerEmail
+        );
+      } catch (emailError) {
+        console.error("Error sending email to organizer:", emailError);
+      }
+
+      // Send confirmation email to registrant
+      try {
+        await sendEmail(
+          `Registration Confirmation for ${eventName}`,
+          formData.fullName,
+          `
+            Thank you for registering for ${eventName}!
+
+            Your Registration Details:
+            Name: ${formData.fullName}
+            Email: ${formData.email}
+            ${
+              formData.contactNumber
+                ? `Contact Number: ${formData.contactNumber}`
+                : ""
+            }
+
+            Event Details:
+            Name: ${eventName}
+            Date: ${new Date(event.startDate).toLocaleDateString()}
+            Time: ${event.startTime}
+            Location: ${event.location}
+            Organizer: ${event.organizer}
+
+            You can view the event at: http://localhost:3000/event/${eventId}
+          `,
+          formData.email
+        );
+      } catch (emailError) {
+        console.error(
+          "Error sending confirmation email to registrant:",
+          emailError
+        );
       }
 
       setIsSuccess(true);

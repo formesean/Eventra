@@ -31,6 +31,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { StatusSelect } from "~/app/_components/status-select";
+import { sendEmail } from "~/lib/sendEmail";
 
 interface RSVP {
   id: number;
@@ -289,6 +290,40 @@ export default function RSVPList() {
           throw new Error(data.error || "Failed to update status");
         }
 
+        // Get the RSVP details for the email
+        const rsvp = rsvps.find((r) => r.id === confirmDialog.rsvpId);
+        if (rsvp && eventData) {
+          // Send email notification to attendee
+          try {
+            await sendEmail(
+              `RSVP Status Updated for ${eventData.name}`,
+              rsvp.name,
+              `
+                Your RSVP status for ${eventData.name} has been updated.
+
+                Event Details:
+                Name: ${eventData.name}
+                Date: ${new Date(eventData.startDate).toLocaleDateString()}
+                Time: ${eventData.startTime}
+                Location: ${eventData.location}
+
+                Your new status: ${
+                  confirmDialog.newStatus === "going"
+                    ? "Going"
+                    : confirmDialog.newStatus === "maybe"
+                    ? "Maybe"
+                    : "Not Going"
+                }
+
+                You can view the event at: http://localhost:3000/event/${eventId}
+              `,
+              rsvp.email
+            );
+          } catch (emailError) {
+            console.error("Error sending status update email:", emailError);
+          }
+        }
+
         // Update local state
         setRSVPs((prev) =>
           prev.map((rsvp) =>
@@ -337,6 +372,28 @@ export default function RSVPList() {
     } else if (confirmDialog.type === "delete" && confirmDialog.rsvpId) {
       const rsvpToDelete = rsvps.find((r) => r.id === confirmDialog.rsvpId);
       if (rsvpToDelete && eventData) {
+        // Send email notification about removal
+        try {
+          await sendEmail(
+            `Removed from ${eventData.name}`,
+            rsvpToDelete.name,
+            `
+              You have been removed from the RSVP list for ${eventData.name}.
+
+              Event Details:
+              Name: ${eventData.name}
+              Date: ${new Date(eventData.startDate).toLocaleDateString()}
+              Time: ${eventData.startTime}
+              Location: ${eventData.location}
+
+              If you believe this was done in error, please contact the event organizer.
+            `,
+            rsvpToDelete.email
+          );
+        } catch (emailError) {
+          console.error("Error sending removal email:", emailError);
+        }
+
         // Update event data counts before removing the RSVP
         setEventData((prev: any) => {
           const newData = { ...prev };

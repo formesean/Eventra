@@ -23,6 +23,7 @@ import {
 import { Button } from "../../components/ui/button";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
+import Login from "../_components/login";
 
 type EventItem = {
   id: any;
@@ -221,13 +222,7 @@ export default function EventPage() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button
-                variant="ghost"
-                onClick={() => router.push("/login")}
-                className="text-gray-300 hover:text-white"
-              >
-                Sign in
-              </Button>
+              <Login />
             )}
           </div>
         </div>

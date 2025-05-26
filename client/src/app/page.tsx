@@ -53,13 +53,7 @@ const HomePage = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Button
-            variant="ghost"
-            onClick={() => router.push("/login")}
-            className="text-gray-300 hover:text-white"
-          >
-            Sign in
-          </Button>
+          <Login />
         )}
       </div>
 
