@@ -17,7 +17,7 @@ Before you begin, ensure you have the following installed:
 1. Start XAMPP Control Panel and start Apache and MySQL services
 2. Navigate to your XAMPP installation directory (typically `C:\xampp` on Windows)
 3. Copy the entire `server` folder to the `htdocs` directory
-4. The backend API will be accessible at `http://localhost/Eventra/server/`
+4. The backend API will be accessible at `http://localhost/server/`
 
 ### Frontend Setup (Next.js)
 
@@ -48,7 +48,7 @@ The frontend will be accessible at `http://localhost:3000`
 2. Open phpMyAdmin (http://localhost/phpmyadmin)
 3. Create a new database named `eventra`
 4. Import the database schema:
-   - Locate the `eventra.sql` file in the root project folder
+   - Locate the `eventra.sql` file in the `server` folder
    - In phpMyAdmin, select the `eventra` database
    - Click on the "Import" tab
    - Click "Choose File" and select the `eventra.sql` file

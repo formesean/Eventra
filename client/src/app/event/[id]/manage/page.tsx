@@ -30,7 +30,8 @@ import {
 } from "~/components/ui/dialog";
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface RSVP {
   id: number;
@@ -159,6 +160,9 @@ function StatusSelect({
 
 export default function RSVPList() {
   const router = useRouter();
+  const params = useParams();
+  const eventId = params.id as string;
+  const { data: session, status } = useSession();
   const [rsvps, setRSVPs] = useState<RSVP[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -166,6 +170,8 @@ export default function RSVPList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [eventData, setEventData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isHost, setIsHost] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const itemsPerPage = 10;
 
   const [confirmDialog, setConfirmDialog] = useState<{
@@ -183,18 +189,56 @@ export default function RSVPList() {
   });
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const eventDataParam = urlParams.get("eventData");
-    if (eventDataParam) {
-      try {
-        const parsedEventData = JSON.parse(decodeURIComponent(eventDataParam));
-        setEventData(parsedEventData);
-        fetchAttendees(parsedEventData.id);
-      } catch (error) {
-        console.error("Error parsing event data:", error);
+    const checkAuthorization = async () => {
+      // Check authentication
+      if (status === "unauthenticated") {
+        router.push(`/event/${eventId}`);
+        return;
       }
-    }
-  }, []);
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const eventDataParam = urlParams.get("eventData");
+      if (eventDataParam) {
+        try {
+          const parsedEventData = JSON.parse(
+            decodeURIComponent(eventDataParam)
+          );
+          setEventData(parsedEventData);
+
+          // Check if user is the host
+          if (session?.user?.email) {
+            try {
+              const response = await fetch(
+                `/api/user?id=${parsedEventData.userId}`
+              );
+              const data = await response.json();
+              const organizerEmail = data[0].email;
+              const isUserHost = session?.user?.email === organizerEmail;
+              setIsHost(isUserHost);
+
+              if (!isUserHost) {
+                router.push(`/event/${eventId}`);
+                return;
+              }
+
+              setIsAuthorized(true);
+              await fetchAttendees(parsedEventData.id);
+            } catch (err) {
+              console.error("Error checking host status:", err);
+              router.push(`/event/${eventId}`);
+            }
+          }
+        } catch (error) {
+          console.error("Error parsing event data:", error);
+          router.push(`/event/${eventId}`);
+        }
+      } else {
+        router.push(`/event/${eventId}`);
+      }
+    };
+
+    checkAuthorization();
+  }, [session, status, eventId, router]);
 
   const fetchAttendees = async (eventId: number) => {
     try {
@@ -400,6 +444,14 @@ export default function RSVPList() {
   };
 
   const rsvpCounts = getRSVPCounts();
+
+  if (!isAuthorized || status === "loading") {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-purple-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-purple-900">
