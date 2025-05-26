@@ -91,3 +91,58 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export async function DELETE(request: Request) {
+  try {
+    const data = await request.json();
+    const { userId, eventId } = data;
+
+    if (!userId || !eventId) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Missing required fields: userId and eventId",
+        },
+        { status: 400 }
+      );
+    }
+
+    const response = await fetch("http://localhost/server/register.php", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ userId, eventId }),
+    });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      console.error("Non-JSON response:", await response.text());
+      return NextResponse.json(
+        { success: false, error: "Invalid response from server" },
+        { status: 500 }
+      );
+    }
+
+    const responseData = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: responseData.error || "Failed to cancel registration",
+        },
+        { status: response.status }
+      );
+    }
+
+    return NextResponse.json(responseData);
+  } catch (error) {
+    console.error("Error canceling registration:", error);
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

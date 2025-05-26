@@ -2,7 +2,7 @@
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET,POST,PUT');
+header('Access-Control-Allow-Methods: GET,POST,PUT, DELETE');
 header('Access-Control-Allow-Headers: Content-Type');
 
 require_once 'db.php';
@@ -193,6 +193,64 @@ elseif ($method === 'PUT') {
     echo json_encode([
       'success' => true,
       'message' => 'Status updated successfully'
+    ]);
+  } catch (PDOException $e) {
+    $pdo->rollBack();
+    http_response_code(500);
+    echo json_encode([
+      'error' => 'Database error occurred',
+      'details' => $e->getMessage()
+    ]);
+  }
+}
+
+elseif ($method === 'DELETE') {
+  $data = json_decode(file_get_contents('php://input'), true);
+
+  if (!isset($data['userId'], $data['eventId'])) {
+    http_response_code(400);
+    echo json_encode(['error' => 'Missing required fields: userId and eventId']);
+    exit;
+  }
+
+  try {
+    $pdo->beginTransaction();
+
+    $currentStatusQuery = $pdo->prepare("SELECT id, status FROM registration WHERE userId = :userId AND eventId = :eventId");
+    $currentStatusQuery->execute([
+      ':userId' => $data['userId'],
+      ':eventId' => $data['eventId']
+    ]);
+    $currentRegistration = $currentStatusQuery->fetch(PDO::FETCH_ASSOC);
+
+    if (!$currentRegistration) {
+      http_response_code(404);
+      echo json_encode(['error' => 'Registration not found']);
+      exit;
+    }
+
+    // Update event counts based on current status
+    $status = $currentRegistration['status'];
+    if ($status === 'going') {
+      $updateEvent = $pdo->prepare("UPDATE event SET goingCount = goingCount - 1, attendees = attendees - 1 WHERE id = :eventId");
+      $updateEvent->execute([':eventId' => $data['eventId']]);
+    } elseif ($status === 'maybe') {
+      $updateEvent = $pdo->prepare("UPDATE event SET maybeCount = maybeCount - 1, attendees = attendees - 1 WHERE id = :eventId");
+      $updateEvent->execute([':eventId' => $data['eventId']]);
+    } elseif ($status === 'not-going') {
+      $updateEvent = $pdo->prepare("UPDATE event SET notGoingCount = notGoingCount - 1, attendees = attendees - 1 WHERE id = :eventId");
+      $updateEvent->execute([':eventId' => $data['eventId']]);
+    }
+
+    // Delete the registration
+    $deleteQuery = $pdo->prepare("DELETE FROM registration WHERE id = :registrationId");
+    $deleteQuery->execute([':registrationId' => $currentRegistration['id']]);
+
+    $pdo->commit();
+
+    echo json_encode([
+      'success' => true,
+      'message' => 'Registration cancelled successfully'
     ]);
   } catch (PDOException $e) {
     $pdo->rollBack();
