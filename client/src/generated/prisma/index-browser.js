@@ -128,6 +128,18 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.RegistrationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  eventId: 'eventId',
+  fullName: 'fullName',
+  email: 'email',
+  contactNumber: 'contactNumber',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.EventScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -141,11 +153,15 @@ exports.Prisma.EventScalarFieldEnum = {
   location: 'location',
   organizer: 'organizer',
   attendees: 'attendees',
+  goingCount: 'goingCount',
+  maybeCount: 'maybeCount',
+  notGoingCount: 'notGoingCount',
   hasTickets: 'hasTickets',
   requiresApproval: 'requiresApproval',
   hasCapacity: 'hasCapacity',
   isFree: 'isFree',
   capacity: 'capacity',
+  bannerUrl: 'bannerUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -165,6 +181,13 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   name: 'name'
 };
 
+exports.Prisma.RegistrationOrderByRelevanceFieldEnum = {
+  fullName: 'fullName',
+  email: 'email',
+  contactNumber: 'contactNumber',
+  status: 'status'
+};
+
 exports.Prisma.EventOrderByRelevanceFieldEnum = {
   name: 'name',
   description: 'description',
@@ -173,12 +196,14 @@ exports.Prisma.EventOrderByRelevanceFieldEnum = {
   timezone: 'timezone',
   location: 'location',
   organizer: 'organizer',
-  capacity: 'capacity'
+  capacity: 'capacity',
+  bannerUrl: 'bannerUrl'
 };
 
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Registration: 'Registration',
   Event: 'Event'
 };
 

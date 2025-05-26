@@ -19,6 +19,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model Registration
+ * 
+ */
+export type Registration = $Result.DefaultSelection<Prisma.$RegistrationPayload>
+/**
  * Model Event
  * 
  */
@@ -158,6 +163,16 @@ export class PrismaClient<
     * ```
     */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.registration`: Exposes CRUD operations for the **Registration** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Registrations
+    * const registrations = await prisma.registration.findMany()
+    * ```
+    */
+  get registration(): Prisma.RegistrationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.event`: Exposes CRUD operations for the **Event** model.
@@ -609,6 +624,7 @@ export namespace Prisma {
 
   export const ModelName: {
     User: 'User',
+    Registration: 'Registration',
     Event: 'Event'
   };
 
@@ -628,7 +644,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "event"
+      modelProps: "user" | "registration" | "event"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -695,6 +711,72 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      Registration: {
+        payload: Prisma.$RegistrationPayload<ExtArgs>
+        fields: Prisma.RegistrationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.RegistrationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.RegistrationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationPayload>
+          }
+          findFirst: {
+            args: Prisma.RegistrationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.RegistrationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationPayload>
+          }
+          findMany: {
+            args: Prisma.RegistrationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationPayload>[]
+          }
+          create: {
+            args: Prisma.RegistrationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationPayload>
+          }
+          createMany: {
+            args: Prisma.RegistrationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.RegistrationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationPayload>
+          }
+          update: {
+            args: Prisma.RegistrationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationPayload>
+          }
+          deleteMany: {
+            args: Prisma.RegistrationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.RegistrationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.RegistrationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$RegistrationPayload>
+          }
+          aggregate: {
+            args: Prisma.RegistrationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRegistration>
+          }
+          groupBy: {
+            args: Prisma.RegistrationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<RegistrationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.RegistrationCountArgs<ExtArgs>
+            result: $Utils.Optional<RegistrationCountAggregateOutputType> | number
           }
         }
       }
@@ -849,6 +931,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     user?: UserOmit
+    registration?: RegistrationOmit
     event?: EventOmit
   }
 
@@ -945,10 +1028,12 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     Event: number
+    Registration: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Event?: boolean | UserCountOutputTypeCountEventArgs
+    Registration?: boolean | UserCountOutputTypeCountRegistrationArgs
   }
 
   // Custom InputTypes
@@ -967,6 +1052,44 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountEventArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: EventWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountRegistrationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RegistrationWhereInput
+  }
+
+
+  /**
+   * Count Type EventCountOutputType
+   */
+
+  export type EventCountOutputType = {
+    registrations: number
+  }
+
+  export type EventCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    registrations?: boolean | EventCountOutputTypeCountRegistrationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EventCountOutputType without action
+   */
+  export type EventCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventCountOutputType
+     */
+    select?: EventCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EventCountOutputType without action
+   */
+  export type EventCountOutputTypeCountRegistrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RegistrationWhereInput
   }
 
 
@@ -1173,6 +1296,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     Event?: boolean | User$EventArgs<ExtArgs>
+    Registration?: boolean | User$RegistrationArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1189,6 +1313,7 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Event?: boolean | User$EventArgs<ExtArgs>
+    Registration?: boolean | User$RegistrationArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -1196,6 +1321,7 @@ export namespace Prisma {
     name: "User"
     objects: {
       Event: Prisma.$EventPayload<ExtArgs>[]
+      Registration: Prisma.$RegistrationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -1544,6 +1670,7 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     Event<T extends User$EventArgs<ExtArgs> = {}>(args?: Subset<T, User$EventArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Registration<T extends User$RegistrationArgs<ExtArgs> = {}>(args?: Subset<T, User$RegistrationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1945,6 +2072,30 @@ export namespace Prisma {
   }
 
   /**
+   * User.Registration
+   */
+  export type User$RegistrationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+    where?: RegistrationWhereInput
+    orderBy?: RegistrationOrderByWithRelationInput | RegistrationOrderByWithRelationInput[]
+    cursor?: RegistrationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RegistrationScalarFieldEnum | RegistrationScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1964,6 +2115,1025 @@ export namespace Prisma {
 
 
   /**
+   * Model Registration
+   */
+
+  export type AggregateRegistration = {
+    _count: RegistrationCountAggregateOutputType | null
+    _avg: RegistrationAvgAggregateOutputType | null
+    _sum: RegistrationSumAggregateOutputType | null
+    _min: RegistrationMinAggregateOutputType | null
+    _max: RegistrationMaxAggregateOutputType | null
+  }
+
+  export type RegistrationAvgAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    eventId: number | null
+  }
+
+  export type RegistrationSumAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    eventId: number | null
+  }
+
+  export type RegistrationMinAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    eventId: number | null
+    fullName: string | null
+    email: string | null
+    contactNumber: string | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RegistrationMaxAggregateOutputType = {
+    id: number | null
+    userId: number | null
+    eventId: number | null
+    fullName: string | null
+    email: string | null
+    contactNumber: string | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type RegistrationCountAggregateOutputType = {
+    id: number
+    userId: number
+    eventId: number
+    fullName: number
+    email: number
+    contactNumber: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type RegistrationAvgAggregateInputType = {
+    id?: true
+    userId?: true
+    eventId?: true
+  }
+
+  export type RegistrationSumAggregateInputType = {
+    id?: true
+    userId?: true
+    eventId?: true
+  }
+
+  export type RegistrationMinAggregateInputType = {
+    id?: true
+    userId?: true
+    eventId?: true
+    fullName?: true
+    email?: true
+    contactNumber?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RegistrationMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    eventId?: true
+    fullName?: true
+    email?: true
+    contactNumber?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type RegistrationCountAggregateInputType = {
+    id?: true
+    userId?: true
+    eventId?: true
+    fullName?: true
+    email?: true
+    contactNumber?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type RegistrationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Registration to aggregate.
+     */
+    where?: RegistrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Registrations to fetch.
+     */
+    orderBy?: RegistrationOrderByWithRelationInput | RegistrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: RegistrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Registrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Registrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Registrations
+    **/
+    _count?: true | RegistrationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: RegistrationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RegistrationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: RegistrationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: RegistrationMaxAggregateInputType
+  }
+
+  export type GetRegistrationAggregateType<T extends RegistrationAggregateArgs> = {
+        [P in keyof T & keyof AggregateRegistration]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRegistration[P]>
+      : GetScalarType<T[P], AggregateRegistration[P]>
+  }
+
+
+
+
+  export type RegistrationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RegistrationWhereInput
+    orderBy?: RegistrationOrderByWithAggregationInput | RegistrationOrderByWithAggregationInput[]
+    by: RegistrationScalarFieldEnum[] | RegistrationScalarFieldEnum
+    having?: RegistrationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: RegistrationCountAggregateInputType | true
+    _avg?: RegistrationAvgAggregateInputType
+    _sum?: RegistrationSumAggregateInputType
+    _min?: RegistrationMinAggregateInputType
+    _max?: RegistrationMaxAggregateInputType
+  }
+
+  export type RegistrationGroupByOutputType = {
+    id: number
+    userId: number
+    eventId: number
+    fullName: string
+    email: string
+    contactNumber: string | null
+    status: string
+    createdAt: Date
+    updatedAt: Date
+    _count: RegistrationCountAggregateOutputType | null
+    _avg: RegistrationAvgAggregateOutputType | null
+    _sum: RegistrationSumAggregateOutputType | null
+    _min: RegistrationMinAggregateOutputType | null
+    _max: RegistrationMaxAggregateOutputType | null
+  }
+
+  type GetRegistrationGroupByPayload<T extends RegistrationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<RegistrationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof RegistrationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], RegistrationGroupByOutputType[P]>
+            : GetScalarType<T[P], RegistrationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type RegistrationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    eventId?: boolean
+    fullName?: boolean
+    email?: boolean
+    contactNumber?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["registration"]>
+
+
+
+  export type RegistrationSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    eventId?: boolean
+    fullName?: boolean
+    email?: boolean
+    contactNumber?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type RegistrationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "eventId" | "fullName" | "email" | "contactNumber" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["registration"]>
+  export type RegistrationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }
+
+  export type $RegistrationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Registration"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      event: Prisma.$EventPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      userId: number
+      eventId: number
+      fullName: string
+      email: string
+      contactNumber: string | null
+      status: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["registration"]>
+    composites: {}
+  }
+
+  type RegistrationGetPayload<S extends boolean | null | undefined | RegistrationDefaultArgs> = $Result.GetResult<Prisma.$RegistrationPayload, S>
+
+  type RegistrationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<RegistrationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: RegistrationCountAggregateInputType | true
+    }
+
+  export interface RegistrationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Registration'], meta: { name: 'Registration' } }
+    /**
+     * Find zero or one Registration that matches the filter.
+     * @param {RegistrationFindUniqueArgs} args - Arguments to find a Registration
+     * @example
+     * // Get one Registration
+     * const registration = await prisma.registration.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends RegistrationFindUniqueArgs>(args: SelectSubset<T, RegistrationFindUniqueArgs<ExtArgs>>): Prisma__RegistrationClient<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Registration that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {RegistrationFindUniqueOrThrowArgs} args - Arguments to find a Registration
+     * @example
+     * // Get one Registration
+     * const registration = await prisma.registration.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends RegistrationFindUniqueOrThrowArgs>(args: SelectSubset<T, RegistrationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RegistrationClient<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Registration that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationFindFirstArgs} args - Arguments to find a Registration
+     * @example
+     * // Get one Registration
+     * const registration = await prisma.registration.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends RegistrationFindFirstArgs>(args?: SelectSubset<T, RegistrationFindFirstArgs<ExtArgs>>): Prisma__RegistrationClient<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Registration that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationFindFirstOrThrowArgs} args - Arguments to find a Registration
+     * @example
+     * // Get one Registration
+     * const registration = await prisma.registration.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends RegistrationFindFirstOrThrowArgs>(args?: SelectSubset<T, RegistrationFindFirstOrThrowArgs<ExtArgs>>): Prisma__RegistrationClient<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Registrations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Registrations
+     * const registrations = await prisma.registration.findMany()
+     * 
+     * // Get first 10 Registrations
+     * const registrations = await prisma.registration.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const registrationWithIdOnly = await prisma.registration.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends RegistrationFindManyArgs>(args?: SelectSubset<T, RegistrationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Registration.
+     * @param {RegistrationCreateArgs} args - Arguments to create a Registration.
+     * @example
+     * // Create one Registration
+     * const Registration = await prisma.registration.create({
+     *   data: {
+     *     // ... data to create a Registration
+     *   }
+     * })
+     * 
+     */
+    create<T extends RegistrationCreateArgs>(args: SelectSubset<T, RegistrationCreateArgs<ExtArgs>>): Prisma__RegistrationClient<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Registrations.
+     * @param {RegistrationCreateManyArgs} args - Arguments to create many Registrations.
+     * @example
+     * // Create many Registrations
+     * const registration = await prisma.registration.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends RegistrationCreateManyArgs>(args?: SelectSubset<T, RegistrationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Registration.
+     * @param {RegistrationDeleteArgs} args - Arguments to delete one Registration.
+     * @example
+     * // Delete one Registration
+     * const Registration = await prisma.registration.delete({
+     *   where: {
+     *     // ... filter to delete one Registration
+     *   }
+     * })
+     * 
+     */
+    delete<T extends RegistrationDeleteArgs>(args: SelectSubset<T, RegistrationDeleteArgs<ExtArgs>>): Prisma__RegistrationClient<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Registration.
+     * @param {RegistrationUpdateArgs} args - Arguments to update one Registration.
+     * @example
+     * // Update one Registration
+     * const registration = await prisma.registration.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends RegistrationUpdateArgs>(args: SelectSubset<T, RegistrationUpdateArgs<ExtArgs>>): Prisma__RegistrationClient<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Registrations.
+     * @param {RegistrationDeleteManyArgs} args - Arguments to filter Registrations to delete.
+     * @example
+     * // Delete a few Registrations
+     * const { count } = await prisma.registration.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends RegistrationDeleteManyArgs>(args?: SelectSubset<T, RegistrationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Registrations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Registrations
+     * const registration = await prisma.registration.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends RegistrationUpdateManyArgs>(args: SelectSubset<T, RegistrationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Registration.
+     * @param {RegistrationUpsertArgs} args - Arguments to update or create a Registration.
+     * @example
+     * // Update or create a Registration
+     * const registration = await prisma.registration.upsert({
+     *   create: {
+     *     // ... data to create a Registration
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Registration we want to update
+     *   }
+     * })
+     */
+    upsert<T extends RegistrationUpsertArgs>(args: SelectSubset<T, RegistrationUpsertArgs<ExtArgs>>): Prisma__RegistrationClient<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Registrations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationCountArgs} args - Arguments to filter Registrations to count.
+     * @example
+     * // Count the number of Registrations
+     * const count = await prisma.registration.count({
+     *   where: {
+     *     // ... the filter for the Registrations we want to count
+     *   }
+     * })
+    **/
+    count<T extends RegistrationCountArgs>(
+      args?: Subset<T, RegistrationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], RegistrationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Registration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends RegistrationAggregateArgs>(args: Subset<T, RegistrationAggregateArgs>): Prisma.PrismaPromise<GetRegistrationAggregateType<T>>
+
+    /**
+     * Group by Registration.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {RegistrationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends RegistrationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: RegistrationGroupByArgs['orderBy'] }
+        : { orderBy?: RegistrationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, RegistrationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRegistrationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Registration model
+   */
+  readonly fields: RegistrationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Registration.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__RegistrationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    event<T extends EventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EventDefaultArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Registration model
+   */
+  interface RegistrationFieldRefs {
+    readonly id: FieldRef<"Registration", 'Int'>
+    readonly userId: FieldRef<"Registration", 'Int'>
+    readonly eventId: FieldRef<"Registration", 'Int'>
+    readonly fullName: FieldRef<"Registration", 'String'>
+    readonly email: FieldRef<"Registration", 'String'>
+    readonly contactNumber: FieldRef<"Registration", 'String'>
+    readonly status: FieldRef<"Registration", 'String'>
+    readonly createdAt: FieldRef<"Registration", 'DateTime'>
+    readonly updatedAt: FieldRef<"Registration", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Registration findUnique
+   */
+  export type RegistrationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+    /**
+     * Filter, which Registration to fetch.
+     */
+    where: RegistrationWhereUniqueInput
+  }
+
+  /**
+   * Registration findUniqueOrThrow
+   */
+  export type RegistrationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+    /**
+     * Filter, which Registration to fetch.
+     */
+    where: RegistrationWhereUniqueInput
+  }
+
+  /**
+   * Registration findFirst
+   */
+  export type RegistrationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+    /**
+     * Filter, which Registration to fetch.
+     */
+    where?: RegistrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Registrations to fetch.
+     */
+    orderBy?: RegistrationOrderByWithRelationInput | RegistrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Registrations.
+     */
+    cursor?: RegistrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Registrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Registrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Registrations.
+     */
+    distinct?: RegistrationScalarFieldEnum | RegistrationScalarFieldEnum[]
+  }
+
+  /**
+   * Registration findFirstOrThrow
+   */
+  export type RegistrationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+    /**
+     * Filter, which Registration to fetch.
+     */
+    where?: RegistrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Registrations to fetch.
+     */
+    orderBy?: RegistrationOrderByWithRelationInput | RegistrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Registrations.
+     */
+    cursor?: RegistrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Registrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Registrations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Registrations.
+     */
+    distinct?: RegistrationScalarFieldEnum | RegistrationScalarFieldEnum[]
+  }
+
+  /**
+   * Registration findMany
+   */
+  export type RegistrationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+    /**
+     * Filter, which Registrations to fetch.
+     */
+    where?: RegistrationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Registrations to fetch.
+     */
+    orderBy?: RegistrationOrderByWithRelationInput | RegistrationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Registrations.
+     */
+    cursor?: RegistrationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Registrations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Registrations.
+     */
+    skip?: number
+    distinct?: RegistrationScalarFieldEnum | RegistrationScalarFieldEnum[]
+  }
+
+  /**
+   * Registration create
+   */
+  export type RegistrationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Registration.
+     */
+    data: XOR<RegistrationCreateInput, RegistrationUncheckedCreateInput>
+  }
+
+  /**
+   * Registration createMany
+   */
+  export type RegistrationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Registrations.
+     */
+    data: RegistrationCreateManyInput | RegistrationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Registration update
+   */
+  export type RegistrationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Registration.
+     */
+    data: XOR<RegistrationUpdateInput, RegistrationUncheckedUpdateInput>
+    /**
+     * Choose, which Registration to update.
+     */
+    where: RegistrationWhereUniqueInput
+  }
+
+  /**
+   * Registration updateMany
+   */
+  export type RegistrationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Registrations.
+     */
+    data: XOR<RegistrationUpdateManyMutationInput, RegistrationUncheckedUpdateManyInput>
+    /**
+     * Filter which Registrations to update
+     */
+    where?: RegistrationWhereInput
+    /**
+     * Limit how many Registrations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Registration upsert
+   */
+  export type RegistrationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Registration to update in case it exists.
+     */
+    where: RegistrationWhereUniqueInput
+    /**
+     * In case the Registration found by the `where` argument doesn't exist, create a new Registration with this data.
+     */
+    create: XOR<RegistrationCreateInput, RegistrationUncheckedCreateInput>
+    /**
+     * In case the Registration was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<RegistrationUpdateInput, RegistrationUncheckedUpdateInput>
+  }
+
+  /**
+   * Registration delete
+   */
+  export type RegistrationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+    /**
+     * Filter which Registration to delete.
+     */
+    where: RegistrationWhereUniqueInput
+  }
+
+  /**
+   * Registration deleteMany
+   */
+  export type RegistrationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Registrations to delete
+     */
+    where?: RegistrationWhereInput
+    /**
+     * Limit how many Registrations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Registration without action
+   */
+  export type RegistrationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Event
    */
 
@@ -1979,12 +3149,18 @@ export namespace Prisma {
     id: number | null
     userId: number | null
     attendees: number | null
+    goingCount: number | null
+    maybeCount: number | null
+    notGoingCount: number | null
   }
 
   export type EventSumAggregateOutputType = {
     id: number | null
     userId: number | null
     attendees: number | null
+    goingCount: number | null
+    maybeCount: number | null
+    notGoingCount: number | null
   }
 
   export type EventMinAggregateOutputType = {
@@ -2000,11 +3176,15 @@ export namespace Prisma {
     location: string | null
     organizer: string | null
     attendees: number | null
+    goingCount: number | null
+    maybeCount: number | null
+    notGoingCount: number | null
     hasTickets: boolean | null
     requiresApproval: boolean | null
     hasCapacity: boolean | null
     isFree: boolean | null
     capacity: string | null
+    bannerUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2022,11 +3202,15 @@ export namespace Prisma {
     location: string | null
     organizer: string | null
     attendees: number | null
+    goingCount: number | null
+    maybeCount: number | null
+    notGoingCount: number | null
     hasTickets: boolean | null
     requiresApproval: boolean | null
     hasCapacity: boolean | null
     isFree: boolean | null
     capacity: string | null
+    bannerUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2044,11 +3228,15 @@ export namespace Prisma {
     location: number
     organizer: number
     attendees: number
+    goingCount: number
+    maybeCount: number
+    notGoingCount: number
     hasTickets: number
     requiresApproval: number
     hasCapacity: number
     isFree: number
     capacity: number
+    bannerUrl: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2059,12 +3247,18 @@ export namespace Prisma {
     id?: true
     userId?: true
     attendees?: true
+    goingCount?: true
+    maybeCount?: true
+    notGoingCount?: true
   }
 
   export type EventSumAggregateInputType = {
     id?: true
     userId?: true
     attendees?: true
+    goingCount?: true
+    maybeCount?: true
+    notGoingCount?: true
   }
 
   export type EventMinAggregateInputType = {
@@ -2080,11 +3274,15 @@ export namespace Prisma {
     location?: true
     organizer?: true
     attendees?: true
+    goingCount?: true
+    maybeCount?: true
+    notGoingCount?: true
     hasTickets?: true
     requiresApproval?: true
     hasCapacity?: true
     isFree?: true
     capacity?: true
+    bannerUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2102,11 +3300,15 @@ export namespace Prisma {
     location?: true
     organizer?: true
     attendees?: true
+    goingCount?: true
+    maybeCount?: true
+    notGoingCount?: true
     hasTickets?: true
     requiresApproval?: true
     hasCapacity?: true
     isFree?: true
     capacity?: true
+    bannerUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2124,11 +3326,15 @@ export namespace Prisma {
     location?: true
     organizer?: true
     attendees?: true
+    goingCount?: true
+    maybeCount?: true
+    notGoingCount?: true
     hasTickets?: true
     requiresApproval?: true
     hasCapacity?: true
     isFree?: true
     capacity?: true
+    bannerUrl?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2233,11 +3439,15 @@ export namespace Prisma {
     location: string | null
     organizer: string
     attendees: number
+    goingCount: number
+    maybeCount: number
+    notGoingCount: number
     hasTickets: boolean
     requiresApproval: boolean
     hasCapacity: boolean
     isFree: boolean
     capacity: string | null
+    bannerUrl: string | null
     createdAt: Date
     updatedAt: Date
     _count: EventCountAggregateOutputType | null
@@ -2274,14 +3484,20 @@ export namespace Prisma {
     location?: boolean
     organizer?: boolean
     attendees?: boolean
+    goingCount?: boolean
+    maybeCount?: boolean
+    notGoingCount?: boolean
     hasTickets?: boolean
     requiresApproval?: boolean
     hasCapacity?: boolean
     isFree?: boolean
     capacity?: boolean
+    bannerUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    registrations?: boolean | Event$registrationsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
 
@@ -2299,23 +3515,30 @@ export namespace Prisma {
     location?: boolean
     organizer?: boolean
     attendees?: boolean
+    goingCount?: boolean
+    maybeCount?: boolean
+    notGoingCount?: boolean
     hasTickets?: boolean
     requiresApproval?: boolean
     hasCapacity?: boolean
     isFree?: boolean
     capacity?: boolean
+    bannerUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "description" | "startDate" | "endDate" | "startTime" | "endTime" | "timezone" | "location" | "organizer" | "attendees" | "hasTickets" | "requiresApproval" | "hasCapacity" | "isFree" | "capacity" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "description" | "startDate" | "endDate" | "startTime" | "endTime" | "timezone" | "location" | "organizer" | "attendees" | "goingCount" | "maybeCount" | "notGoingCount" | "hasTickets" | "requiresApproval" | "hasCapacity" | "isFree" | "capacity" | "bannerUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    registrations?: boolean | Event$registrationsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $EventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Event"
     objects: {
+      registrations: Prisma.$RegistrationPayload<ExtArgs>[]
       user: Prisma.$UserPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -2331,11 +3554,15 @@ export namespace Prisma {
       location: string | null
       organizer: string
       attendees: number
+      goingCount: number
+      maybeCount: number
+      notGoingCount: number
       hasTickets: boolean
       requiresApproval: boolean
       hasCapacity: boolean
       isFree: boolean
       capacity: string | null
+      bannerUrl: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["event"]>
@@ -2678,6 +3905,7 @@ export namespace Prisma {
    */
   export interface Prisma__EventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    registrations<T extends Event$registrationsArgs<ExtArgs> = {}>(args?: Subset<T, Event$registrationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2720,11 +3948,15 @@ export namespace Prisma {
     readonly location: FieldRef<"Event", 'String'>
     readonly organizer: FieldRef<"Event", 'String'>
     readonly attendees: FieldRef<"Event", 'Int'>
+    readonly goingCount: FieldRef<"Event", 'Int'>
+    readonly maybeCount: FieldRef<"Event", 'Int'>
+    readonly notGoingCount: FieldRef<"Event", 'Int'>
     readonly hasTickets: FieldRef<"Event", 'Boolean'>
     readonly requiresApproval: FieldRef<"Event", 'Boolean'>
     readonly hasCapacity: FieldRef<"Event", 'Boolean'>
     readonly isFree: FieldRef<"Event", 'Boolean'>
     readonly capacity: FieldRef<"Event", 'String'>
+    readonly bannerUrl: FieldRef<"Event", 'String'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
     readonly updatedAt: FieldRef<"Event", 'DateTime'>
   }
@@ -3070,6 +4302,30 @@ export namespace Prisma {
   }
 
   /**
+   * Event.registrations
+   */
+  export type Event$registrationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Registration
+     */
+    select?: RegistrationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Registration
+     */
+    omit?: RegistrationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RegistrationInclude<ExtArgs> | null
+    where?: RegistrationWhereInput
+    orderBy?: RegistrationOrderByWithRelationInput | RegistrationOrderByWithRelationInput[]
+    cursor?: RegistrationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RegistrationScalarFieldEnum | RegistrationScalarFieldEnum[]
+  }
+
+  /**
    * Event without action
    */
   export type EventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3113,6 +4369,21 @@ export namespace Prisma {
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+  export const RegistrationScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    eventId: 'eventId',
+    fullName: 'fullName',
+    email: 'email',
+    contactNumber: 'contactNumber',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type RegistrationScalarFieldEnum = (typeof RegistrationScalarFieldEnum)[keyof typeof RegistrationScalarFieldEnum]
+
+
   export const EventScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -3126,11 +4397,15 @@ export namespace Prisma {
     location: 'location',
     organizer: 'organizer',
     attendees: 'attendees',
+    goingCount: 'goingCount',
+    maybeCount: 'maybeCount',
+    notGoingCount: 'notGoingCount',
     hasTickets: 'hasTickets',
     requiresApproval: 'requiresApproval',
     hasCapacity: 'hasCapacity',
     isFree: 'isFree',
     capacity: 'capacity',
+    bannerUrl: 'bannerUrl',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -3162,6 +4437,16 @@ export namespace Prisma {
   export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
 
 
+  export const RegistrationOrderByRelevanceFieldEnum: {
+    fullName: 'fullName',
+    email: 'email',
+    contactNumber: 'contactNumber',
+    status: 'status'
+  };
+
+  export type RegistrationOrderByRelevanceFieldEnum = (typeof RegistrationOrderByRelevanceFieldEnum)[keyof typeof RegistrationOrderByRelevanceFieldEnum]
+
+
   export const EventOrderByRelevanceFieldEnum: {
     name: 'name',
     description: 'description',
@@ -3170,7 +4455,8 @@ export namespace Prisma {
     timezone: 'timezone',
     location: 'location',
     organizer: 'organizer',
-    capacity: 'capacity'
+    capacity: 'capacity',
+    bannerUrl: 'bannerUrl'
   };
 
   export type EventOrderByRelevanceFieldEnum = (typeof EventOrderByRelevanceFieldEnum)[keyof typeof EventOrderByRelevanceFieldEnum]
@@ -3229,6 +4515,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     Event?: EventListRelationFilter
+    Registration?: RegistrationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -3238,6 +4525,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     Event?: EventOrderByRelationAggregateInput
+    Registration?: RegistrationOrderByRelationAggregateInput
     _relevance?: UserOrderByRelevanceInput
   }
 
@@ -3251,6 +4539,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     Event?: EventListRelationFilter
+    Registration?: RegistrationListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -3277,6 +4566,88 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
+  export type RegistrationWhereInput = {
+    AND?: RegistrationWhereInput | RegistrationWhereInput[]
+    OR?: RegistrationWhereInput[]
+    NOT?: RegistrationWhereInput | RegistrationWhereInput[]
+    id?: IntFilter<"Registration"> | number
+    userId?: IntFilter<"Registration"> | number
+    eventId?: IntFilter<"Registration"> | number
+    fullName?: StringFilter<"Registration"> | string
+    email?: StringFilter<"Registration"> | string
+    contactNumber?: StringNullableFilter<"Registration"> | string | null
+    status?: StringFilter<"Registration"> | string
+    createdAt?: DateTimeFilter<"Registration"> | Date | string
+    updatedAt?: DateTimeFilter<"Registration"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    event?: XOR<EventScalarRelationFilter, EventWhereInput>
+  }
+
+  export type RegistrationOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    eventId?: SortOrder
+    fullName?: SortOrder
+    email?: SortOrder
+    contactNumber?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    event?: EventOrderByWithRelationInput
+    _relevance?: RegistrationOrderByRelevanceInput
+  }
+
+  export type RegistrationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    eventId_email?: RegistrationEventIdEmailCompoundUniqueInput
+    AND?: RegistrationWhereInput | RegistrationWhereInput[]
+    OR?: RegistrationWhereInput[]
+    NOT?: RegistrationWhereInput | RegistrationWhereInput[]
+    userId?: IntFilter<"Registration"> | number
+    eventId?: IntFilter<"Registration"> | number
+    fullName?: StringFilter<"Registration"> | string
+    email?: StringFilter<"Registration"> | string
+    contactNumber?: StringNullableFilter<"Registration"> | string | null
+    status?: StringFilter<"Registration"> | string
+    createdAt?: DateTimeFilter<"Registration"> | Date | string
+    updatedAt?: DateTimeFilter<"Registration"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    event?: XOR<EventScalarRelationFilter, EventWhereInput>
+  }, "id" | "eventId_email">
+
+  export type RegistrationOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    eventId?: SortOrder
+    fullName?: SortOrder
+    email?: SortOrder
+    contactNumber?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: RegistrationCountOrderByAggregateInput
+    _avg?: RegistrationAvgOrderByAggregateInput
+    _max?: RegistrationMaxOrderByAggregateInput
+    _min?: RegistrationMinOrderByAggregateInput
+    _sum?: RegistrationSumOrderByAggregateInput
+  }
+
+  export type RegistrationScalarWhereWithAggregatesInput = {
+    AND?: RegistrationScalarWhereWithAggregatesInput | RegistrationScalarWhereWithAggregatesInput[]
+    OR?: RegistrationScalarWhereWithAggregatesInput[]
+    NOT?: RegistrationScalarWhereWithAggregatesInput | RegistrationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Registration"> | number
+    userId?: IntWithAggregatesFilter<"Registration"> | number
+    eventId?: IntWithAggregatesFilter<"Registration"> | number
+    fullName?: StringWithAggregatesFilter<"Registration"> | string
+    email?: StringWithAggregatesFilter<"Registration"> | string
+    contactNumber?: StringNullableWithAggregatesFilter<"Registration"> | string | null
+    status?: StringWithAggregatesFilter<"Registration"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Registration"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Registration"> | Date | string
+  }
+
   export type EventWhereInput = {
     AND?: EventWhereInput | EventWhereInput[]
     OR?: EventWhereInput[]
@@ -3293,13 +4664,18 @@ export namespace Prisma {
     location?: StringNullableFilter<"Event"> | string | null
     organizer?: StringFilter<"Event"> | string
     attendees?: IntFilter<"Event"> | number
+    goingCount?: IntFilter<"Event"> | number
+    maybeCount?: IntFilter<"Event"> | number
+    notGoingCount?: IntFilter<"Event"> | number
     hasTickets?: BoolFilter<"Event"> | boolean
     requiresApproval?: BoolFilter<"Event"> | boolean
     hasCapacity?: BoolFilter<"Event"> | boolean
     isFree?: BoolFilter<"Event"> | boolean
     capacity?: StringNullableFilter<"Event"> | string | null
+    bannerUrl?: StringNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
+    registrations?: RegistrationListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -3316,13 +4692,18 @@ export namespace Prisma {
     location?: SortOrderInput | SortOrder
     organizer?: SortOrder
     attendees?: SortOrder
+    goingCount?: SortOrder
+    maybeCount?: SortOrder
+    notGoingCount?: SortOrder
     hasTickets?: SortOrder
     requiresApproval?: SortOrder
     hasCapacity?: SortOrder
     isFree?: SortOrder
     capacity?: SortOrderInput | SortOrder
+    bannerUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    registrations?: RegistrationOrderByRelationAggregateInput
     user?: UserOrderByWithRelationInput
     _relevance?: EventOrderByRelevanceInput
   }
@@ -3343,13 +4724,18 @@ export namespace Prisma {
     location?: StringNullableFilter<"Event"> | string | null
     organizer?: StringFilter<"Event"> | string
     attendees?: IntFilter<"Event"> | number
+    goingCount?: IntFilter<"Event"> | number
+    maybeCount?: IntFilter<"Event"> | number
+    notGoingCount?: IntFilter<"Event"> | number
     hasTickets?: BoolFilter<"Event"> | boolean
     requiresApproval?: BoolFilter<"Event"> | boolean
     hasCapacity?: BoolFilter<"Event"> | boolean
     isFree?: BoolFilter<"Event"> | boolean
     capacity?: StringNullableFilter<"Event"> | string | null
+    bannerUrl?: StringNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
+    registrations?: RegistrationListRelationFilter
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id">
 
@@ -3366,11 +4752,15 @@ export namespace Prisma {
     location?: SortOrderInput | SortOrder
     organizer?: SortOrder
     attendees?: SortOrder
+    goingCount?: SortOrder
+    maybeCount?: SortOrder
+    notGoingCount?: SortOrder
     hasTickets?: SortOrder
     requiresApproval?: SortOrder
     hasCapacity?: SortOrder
     isFree?: SortOrder
     capacity?: SortOrderInput | SortOrder
+    bannerUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: EventCountOrderByAggregateInput
@@ -3396,11 +4786,15 @@ export namespace Prisma {
     location?: StringNullableWithAggregatesFilter<"Event"> | string | null
     organizer?: StringWithAggregatesFilter<"Event"> | string
     attendees?: IntWithAggregatesFilter<"Event"> | number
+    goingCount?: IntWithAggregatesFilter<"Event"> | number
+    maybeCount?: IntWithAggregatesFilter<"Event"> | number
+    notGoingCount?: IntWithAggregatesFilter<"Event"> | number
     hasTickets?: BoolWithAggregatesFilter<"Event"> | boolean
     requiresApproval?: BoolWithAggregatesFilter<"Event"> | boolean
     hasCapacity?: BoolWithAggregatesFilter<"Event"> | boolean
     isFree?: BoolWithAggregatesFilter<"Event"> | boolean
     capacity?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    bannerUrl?: StringNullableWithAggregatesFilter<"Event"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
   }
@@ -3411,6 +4805,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     Event?: EventCreateNestedManyWithoutUserInput
+    Registration?: RegistrationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -3420,6 +4815,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     Event?: EventUncheckedCreateNestedManyWithoutUserInput
+    Registration?: RegistrationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -3428,6 +4824,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Event?: EventUpdateManyWithoutUserNestedInput
+    Registration?: RegistrationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -3437,6 +4834,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Event?: EventUncheckedUpdateManyWithoutUserNestedInput
+    Registration?: RegistrationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -3462,6 +4860,85 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type RegistrationCreateInput = {
+    fullName: string
+    email: string
+    contactNumber?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutRegistrationInput
+    event: EventCreateNestedOneWithoutRegistrationsInput
+  }
+
+  export type RegistrationUncheckedCreateInput = {
+    id?: number
+    userId: number
+    eventId: number
+    fullName: string
+    email: string
+    contactNumber?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RegistrationUpdateInput = {
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutRegistrationNestedInput
+    event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
+  }
+
+  export type RegistrationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    eventId?: IntFieldUpdateOperationsInput | number
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RegistrationCreateManyInput = {
+    id?: number
+    userId: number
+    eventId: number
+    fullName: string
+    email: string
+    contactNumber?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RegistrationUpdateManyMutationInput = {
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RegistrationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    eventId?: IntFieldUpdateOperationsInput | number
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type EventCreateInput = {
     name: string
     description?: string | null
@@ -3472,14 +4949,19 @@ export namespace Prisma {
     timezone?: string | null
     location?: string | null
     organizer: string
-    attendees: number
+    attendees?: number
+    goingCount?: number
+    maybeCount?: number
+    notGoingCount?: number
     hasTickets?: boolean
     requiresApproval?: boolean
     hasCapacity?: boolean
     isFree?: boolean
     capacity?: string | null
+    bannerUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    registrations?: RegistrationCreateNestedManyWithoutEventInput
     user: UserCreateNestedOneWithoutEventInput
   }
 
@@ -3495,14 +4977,19 @@ export namespace Prisma {
     timezone?: string | null
     location?: string | null
     organizer: string
-    attendees: number
+    attendees?: number
+    goingCount?: number
+    maybeCount?: number
+    notGoingCount?: number
     hasTickets?: boolean
     requiresApproval?: boolean
     hasCapacity?: boolean
     isFree?: boolean
     capacity?: string | null
+    bannerUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    registrations?: RegistrationUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventUpdateInput = {
@@ -3516,13 +5003,18 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    goingCount?: IntFieldUpdateOperationsInput | number
+    maybeCount?: IntFieldUpdateOperationsInput | number
+    notGoingCount?: IntFieldUpdateOperationsInput | number
     hasTickets?: BoolFieldUpdateOperationsInput | boolean
     requiresApproval?: BoolFieldUpdateOperationsInput | boolean
     hasCapacity?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     capacity?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrations?: RegistrationUpdateManyWithoutEventNestedInput
     user?: UserUpdateOneRequiredWithoutEventNestedInput
   }
 
@@ -3539,13 +5031,18 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    goingCount?: IntFieldUpdateOperationsInput | number
+    maybeCount?: IntFieldUpdateOperationsInput | number
+    notGoingCount?: IntFieldUpdateOperationsInput | number
     hasTickets?: BoolFieldUpdateOperationsInput | boolean
     requiresApproval?: BoolFieldUpdateOperationsInput | boolean
     hasCapacity?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     capacity?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrations?: RegistrationUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type EventCreateManyInput = {
@@ -3560,12 +5057,16 @@ export namespace Prisma {
     timezone?: string | null
     location?: string | null
     organizer: string
-    attendees: number
+    attendees?: number
+    goingCount?: number
+    maybeCount?: number
+    notGoingCount?: number
     hasTickets?: boolean
     requiresApproval?: boolean
     hasCapacity?: boolean
     isFree?: boolean
     capacity?: string | null
+    bannerUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -3581,11 +5082,15 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    goingCount?: IntFieldUpdateOperationsInput | number
+    maybeCount?: IntFieldUpdateOperationsInput | number
+    notGoingCount?: IntFieldUpdateOperationsInput | number
     hasTickets?: BoolFieldUpdateOperationsInput | boolean
     requiresApproval?: BoolFieldUpdateOperationsInput | boolean
     hasCapacity?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     capacity?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3603,11 +5108,15 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    goingCount?: IntFieldUpdateOperationsInput | number
+    maybeCount?: IntFieldUpdateOperationsInput | number
+    notGoingCount?: IntFieldUpdateOperationsInput | number
     hasTickets?: BoolFieldUpdateOperationsInput | boolean
     requiresApproval?: BoolFieldUpdateOperationsInput | boolean
     hasCapacity?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     capacity?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -3670,12 +5179,22 @@ export namespace Prisma {
     none?: EventWhereInput
   }
 
+  export type RegistrationListRelationFilter = {
+    every?: RegistrationWhereInput
+    some?: RegistrationWhereInput
+    none?: RegistrationWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
   }
 
   export type EventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RegistrationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -3783,14 +5302,78 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
+  }
+
+  export type EventScalarRelationFilter = {
+    is?: EventWhereInput
+    isNot?: EventWhereInput
+  }
+
+  export type RegistrationOrderByRelevanceInput = {
+    fields: RegistrationOrderByRelevanceFieldEnum | RegistrationOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type RegistrationEventIdEmailCompoundUniqueInput = {
+    eventId: number
+    email: string
+  }
+
+  export type RegistrationCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    eventId?: SortOrder
+    fullName?: SortOrder
+    email?: SortOrder
+    contactNumber?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RegistrationAvgOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    eventId?: SortOrder
+  }
+
+  export type RegistrationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    eventId?: SortOrder
+    fullName?: SortOrder
+    email?: SortOrder
+    contactNumber?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RegistrationMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    eventId?: SortOrder
+    fullName?: SortOrder
+    email?: SortOrder
+    contactNumber?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RegistrationSumOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    eventId?: SortOrder
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type EventOrderByRelevanceInput = {
@@ -3812,11 +5395,15 @@ export namespace Prisma {
     location?: SortOrder
     organizer?: SortOrder
     attendees?: SortOrder
+    goingCount?: SortOrder
+    maybeCount?: SortOrder
+    notGoingCount?: SortOrder
     hasTickets?: SortOrder
     requiresApproval?: SortOrder
     hasCapacity?: SortOrder
     isFree?: SortOrder
     capacity?: SortOrder
+    bannerUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -3825,6 +5412,9 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     attendees?: SortOrder
+    goingCount?: SortOrder
+    maybeCount?: SortOrder
+    notGoingCount?: SortOrder
   }
 
   export type EventMaxOrderByAggregateInput = {
@@ -3840,11 +5430,15 @@ export namespace Prisma {
     location?: SortOrder
     organizer?: SortOrder
     attendees?: SortOrder
+    goingCount?: SortOrder
+    maybeCount?: SortOrder
+    notGoingCount?: SortOrder
     hasTickets?: SortOrder
     requiresApproval?: SortOrder
     hasCapacity?: SortOrder
     isFree?: SortOrder
     capacity?: SortOrder
+    bannerUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -3862,11 +5456,15 @@ export namespace Prisma {
     location?: SortOrder
     organizer?: SortOrder
     attendees?: SortOrder
+    goingCount?: SortOrder
+    maybeCount?: SortOrder
+    notGoingCount?: SortOrder
     hasTickets?: SortOrder
     requiresApproval?: SortOrder
     hasCapacity?: SortOrder
     isFree?: SortOrder
     capacity?: SortOrder
+    bannerUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -3875,6 +5473,9 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     attendees?: SortOrder
+    goingCount?: SortOrder
+    maybeCount?: SortOrder
+    notGoingCount?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -3892,11 +5493,25 @@ export namespace Prisma {
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
   }
 
+  export type RegistrationCreateNestedManyWithoutUserInput = {
+    create?: XOR<RegistrationCreateWithoutUserInput, RegistrationUncheckedCreateWithoutUserInput> | RegistrationCreateWithoutUserInput[] | RegistrationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RegistrationCreateOrConnectWithoutUserInput | RegistrationCreateOrConnectWithoutUserInput[]
+    createMany?: RegistrationCreateManyUserInputEnvelope
+    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+  }
+
   export type EventUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<EventCreateWithoutUserInput, EventUncheckedCreateWithoutUserInput> | EventCreateWithoutUserInput[] | EventUncheckedCreateWithoutUserInput[]
     connectOrCreate?: EventCreateOrConnectWithoutUserInput | EventCreateOrConnectWithoutUserInput[]
     createMany?: EventCreateManyUserInputEnvelope
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
+  }
+
+  export type RegistrationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<RegistrationCreateWithoutUserInput, RegistrationUncheckedCreateWithoutUserInput> | RegistrationCreateWithoutUserInput[] | RegistrationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RegistrationCreateOrConnectWithoutUserInput | RegistrationCreateOrConnectWithoutUserInput[]
+    createMany?: RegistrationCreateManyUserInputEnvelope
+    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -3925,6 +5540,20 @@ export namespace Prisma {
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
+  export type RegistrationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RegistrationCreateWithoutUserInput, RegistrationUncheckedCreateWithoutUserInput> | RegistrationCreateWithoutUserInput[] | RegistrationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RegistrationCreateOrConnectWithoutUserInput | RegistrationCreateOrConnectWithoutUserInput[]
+    upsert?: RegistrationUpsertWithWhereUniqueWithoutUserInput | RegistrationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RegistrationCreateManyUserInputEnvelope
+    set?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    disconnect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    delete?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    update?: RegistrationUpdateWithWhereUniqueWithoutUserInput | RegistrationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RegistrationUpdateManyWithWhereWithoutUserInput | RegistrationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -3947,14 +5576,84 @@ export namespace Prisma {
     deleteMany?: EventScalarWhereInput | EventScalarWhereInput[]
   }
 
+  export type RegistrationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<RegistrationCreateWithoutUserInput, RegistrationUncheckedCreateWithoutUserInput> | RegistrationCreateWithoutUserInput[] | RegistrationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: RegistrationCreateOrConnectWithoutUserInput | RegistrationCreateOrConnectWithoutUserInput[]
+    upsert?: RegistrationUpsertWithWhereUniqueWithoutUserInput | RegistrationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: RegistrationCreateManyUserInputEnvelope
+    set?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    disconnect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    delete?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    update?: RegistrationUpdateWithWhereUniqueWithoutUserInput | RegistrationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: RegistrationUpdateManyWithWhereWithoutUserInput | RegistrationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutRegistrationInput = {
+    create?: XOR<UserCreateWithoutRegistrationInput, UserUncheckedCreateWithoutRegistrationInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRegistrationInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EventCreateNestedOneWithoutRegistrationsInput = {
+    create?: XOR<EventCreateWithoutRegistrationsInput, EventUncheckedCreateWithoutRegistrationsInput>
+    connectOrCreate?: EventCreateOrConnectWithoutRegistrationsInput
+    connect?: EventWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutRegistrationNestedInput = {
+    create?: XOR<UserCreateWithoutRegistrationInput, UserUncheckedCreateWithoutRegistrationInput>
+    connectOrCreate?: UserCreateOrConnectWithoutRegistrationInput
+    upsert?: UserUpsertWithoutRegistrationInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRegistrationInput, UserUpdateWithoutRegistrationInput>, UserUncheckedUpdateWithoutRegistrationInput>
+  }
+
+  export type EventUpdateOneRequiredWithoutRegistrationsNestedInput = {
+    create?: XOR<EventCreateWithoutRegistrationsInput, EventUncheckedCreateWithoutRegistrationsInput>
+    connectOrCreate?: EventCreateOrConnectWithoutRegistrationsInput
+    upsert?: EventUpsertWithoutRegistrationsInput
+    connect?: EventWhereUniqueInput
+    update?: XOR<XOR<EventUpdateToOneWithWhereWithoutRegistrationsInput, EventUpdateWithoutRegistrationsInput>, EventUncheckedUpdateWithoutRegistrationsInput>
+  }
+
+  export type RegistrationCreateNestedManyWithoutEventInput = {
+    create?: XOR<RegistrationCreateWithoutEventInput, RegistrationUncheckedCreateWithoutEventInput> | RegistrationCreateWithoutEventInput[] | RegistrationUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: RegistrationCreateOrConnectWithoutEventInput | RegistrationCreateOrConnectWithoutEventInput[]
+    createMany?: RegistrationCreateManyEventInputEnvelope
+    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+  }
+
   export type UserCreateNestedOneWithoutEventInput = {
     create?: XOR<UserCreateWithoutEventInput, UserUncheckedCreateWithoutEventInput>
     connectOrCreate?: UserCreateOrConnectWithoutEventInput
     connect?: UserWhereUniqueInput
   }
 
+  export type RegistrationUncheckedCreateNestedManyWithoutEventInput = {
+    create?: XOR<RegistrationCreateWithoutEventInput, RegistrationUncheckedCreateWithoutEventInput> | RegistrationCreateWithoutEventInput[] | RegistrationUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: RegistrationCreateOrConnectWithoutEventInput | RegistrationCreateOrConnectWithoutEventInput[]
+    createMany?: RegistrationCreateManyEventInputEnvelope
+    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+  }
+
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type RegistrationUpdateManyWithoutEventNestedInput = {
+    create?: XOR<RegistrationCreateWithoutEventInput, RegistrationUncheckedCreateWithoutEventInput> | RegistrationCreateWithoutEventInput[] | RegistrationUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: RegistrationCreateOrConnectWithoutEventInput | RegistrationCreateOrConnectWithoutEventInput[]
+    upsert?: RegistrationUpsertWithWhereUniqueWithoutEventInput | RegistrationUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: RegistrationCreateManyEventInputEnvelope
+    set?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    disconnect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    delete?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    update?: RegistrationUpdateWithWhereUniqueWithoutEventInput | RegistrationUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: RegistrationUpdateManyWithWhereWithoutEventInput | RegistrationUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
   }
 
   export type UserUpdateOneRequiredWithoutEventNestedInput = {
@@ -3963,6 +5662,20 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutEventInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEventInput, UserUpdateWithoutEventInput>, UserUncheckedUpdateWithoutEventInput>
+  }
+
+  export type RegistrationUncheckedUpdateManyWithoutEventNestedInput = {
+    create?: XOR<RegistrationCreateWithoutEventInput, RegistrationUncheckedCreateWithoutEventInput> | RegistrationCreateWithoutEventInput[] | RegistrationUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: RegistrationCreateOrConnectWithoutEventInput | RegistrationCreateOrConnectWithoutEventInput[]
+    upsert?: RegistrationUpsertWithWhereUniqueWithoutEventInput | RegistrationUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: RegistrationCreateManyEventInputEnvelope
+    set?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    disconnect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    delete?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    connect?: RegistrationWhereUniqueInput | RegistrationWhereUniqueInput[]
+    update?: RegistrationUpdateWithWhereUniqueWithoutEventInput | RegistrationUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: RegistrationUpdateManyWithWhereWithoutEventInput | RegistrationUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -4128,14 +5841,19 @@ export namespace Prisma {
     timezone?: string | null
     location?: string | null
     organizer: string
-    attendees: number
+    attendees?: number
+    goingCount?: number
+    maybeCount?: number
+    notGoingCount?: number
     hasTickets?: boolean
     requiresApproval?: boolean
     hasCapacity?: boolean
     isFree?: boolean
     capacity?: string | null
+    bannerUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    registrations?: RegistrationCreateNestedManyWithoutEventInput
   }
 
   export type EventUncheckedCreateWithoutUserInput = {
@@ -4149,14 +5867,19 @@ export namespace Prisma {
     timezone?: string | null
     location?: string | null
     organizer: string
-    attendees: number
+    attendees?: number
+    goingCount?: number
+    maybeCount?: number
+    notGoingCount?: number
     hasTickets?: boolean
     requiresApproval?: boolean
     hasCapacity?: boolean
     isFree?: boolean
     capacity?: string | null
+    bannerUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    registrations?: RegistrationUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutUserInput = {
@@ -4166,6 +5889,37 @@ export namespace Prisma {
 
   export type EventCreateManyUserInputEnvelope = {
     data: EventCreateManyUserInput | EventCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RegistrationCreateWithoutUserInput = {
+    fullName: string
+    email: string
+    contactNumber?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    event: EventCreateNestedOneWithoutRegistrationsInput
+  }
+
+  export type RegistrationUncheckedCreateWithoutUserInput = {
+    id?: number
+    eventId: number
+    fullName: string
+    email: string
+    contactNumber?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RegistrationCreateOrConnectWithoutUserInput = {
+    where: RegistrationWhereUniqueInput
+    create: XOR<RegistrationCreateWithoutUserInput, RegistrationUncheckedCreateWithoutUserInput>
+  }
+
+  export type RegistrationCreateManyUserInputEnvelope = {
+    data: RegistrationCreateManyUserInput | RegistrationCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -4201,13 +5955,247 @@ export namespace Prisma {
     location?: StringNullableFilter<"Event"> | string | null
     organizer?: StringFilter<"Event"> | string
     attendees?: IntFilter<"Event"> | number
+    goingCount?: IntFilter<"Event"> | number
+    maybeCount?: IntFilter<"Event"> | number
+    notGoingCount?: IntFilter<"Event"> | number
     hasTickets?: BoolFilter<"Event"> | boolean
     requiresApproval?: BoolFilter<"Event"> | boolean
     hasCapacity?: BoolFilter<"Event"> | boolean
     isFree?: BoolFilter<"Event"> | boolean
     capacity?: StringNullableFilter<"Event"> | string | null
+    bannerUrl?: StringNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     updatedAt?: DateTimeFilter<"Event"> | Date | string
+  }
+
+  export type RegistrationUpsertWithWhereUniqueWithoutUserInput = {
+    where: RegistrationWhereUniqueInput
+    update: XOR<RegistrationUpdateWithoutUserInput, RegistrationUncheckedUpdateWithoutUserInput>
+    create: XOR<RegistrationCreateWithoutUserInput, RegistrationUncheckedCreateWithoutUserInput>
+  }
+
+  export type RegistrationUpdateWithWhereUniqueWithoutUserInput = {
+    where: RegistrationWhereUniqueInput
+    data: XOR<RegistrationUpdateWithoutUserInput, RegistrationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type RegistrationUpdateManyWithWhereWithoutUserInput = {
+    where: RegistrationScalarWhereInput
+    data: XOR<RegistrationUpdateManyMutationInput, RegistrationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type RegistrationScalarWhereInput = {
+    AND?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
+    OR?: RegistrationScalarWhereInput[]
+    NOT?: RegistrationScalarWhereInput | RegistrationScalarWhereInput[]
+    id?: IntFilter<"Registration"> | number
+    userId?: IntFilter<"Registration"> | number
+    eventId?: IntFilter<"Registration"> | number
+    fullName?: StringFilter<"Registration"> | string
+    email?: StringFilter<"Registration"> | string
+    contactNumber?: StringNullableFilter<"Registration"> | string | null
+    status?: StringFilter<"Registration"> | string
+    createdAt?: DateTimeFilter<"Registration"> | Date | string
+    updatedAt?: DateTimeFilter<"Registration"> | Date | string
+  }
+
+  export type UserCreateWithoutRegistrationInput = {
+    email: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Event?: EventCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutRegistrationInput = {
+    id?: number
+    email: string
+    name?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    Event?: EventUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutRegistrationInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutRegistrationInput, UserUncheckedCreateWithoutRegistrationInput>
+  }
+
+  export type EventCreateWithoutRegistrationsInput = {
+    name: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    startTime: string
+    endTime: string
+    timezone?: string | null
+    location?: string | null
+    organizer: string
+    attendees?: number
+    goingCount?: number
+    maybeCount?: number
+    notGoingCount?: number
+    hasTickets?: boolean
+    requiresApproval?: boolean
+    hasCapacity?: boolean
+    isFree?: boolean
+    capacity?: string | null
+    bannerUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutEventInput
+  }
+
+  export type EventUncheckedCreateWithoutRegistrationsInput = {
+    id?: number
+    userId: number
+    name: string
+    description?: string | null
+    startDate: Date | string
+    endDate: Date | string
+    startTime: string
+    endTime: string
+    timezone?: string | null
+    location?: string | null
+    organizer: string
+    attendees?: number
+    goingCount?: number
+    maybeCount?: number
+    notGoingCount?: number
+    hasTickets?: boolean
+    requiresApproval?: boolean
+    hasCapacity?: boolean
+    isFree?: boolean
+    capacity?: string | null
+    bannerUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EventCreateOrConnectWithoutRegistrationsInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutRegistrationsInput, EventUncheckedCreateWithoutRegistrationsInput>
+  }
+
+  export type UserUpsertWithoutRegistrationInput = {
+    update: XOR<UserUpdateWithoutRegistrationInput, UserUncheckedUpdateWithoutRegistrationInput>
+    create: XOR<UserCreateWithoutRegistrationInput, UserUncheckedCreateWithoutRegistrationInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutRegistrationInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutRegistrationInput, UserUncheckedUpdateWithoutRegistrationInput>
+  }
+
+  export type UserUpdateWithoutRegistrationInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Event?: EventUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutRegistrationInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Event?: EventUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type EventUpsertWithoutRegistrationsInput = {
+    update: XOR<EventUpdateWithoutRegistrationsInput, EventUncheckedUpdateWithoutRegistrationsInput>
+    create: XOR<EventCreateWithoutRegistrationsInput, EventUncheckedCreateWithoutRegistrationsInput>
+    where?: EventWhereInput
+  }
+
+  export type EventUpdateToOneWithWhereWithoutRegistrationsInput = {
+    where?: EventWhereInput
+    data: XOR<EventUpdateWithoutRegistrationsInput, EventUncheckedUpdateWithoutRegistrationsInput>
+  }
+
+  export type EventUpdateWithoutRegistrationsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    organizer?: StringFieldUpdateOperationsInput | string
+    attendees?: IntFieldUpdateOperationsInput | number
+    goingCount?: IntFieldUpdateOperationsInput | number
+    maybeCount?: IntFieldUpdateOperationsInput | number
+    notGoingCount?: IntFieldUpdateOperationsInput | number
+    hasTickets?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    hasCapacity?: BoolFieldUpdateOperationsInput | boolean
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    capacity?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutEventNestedInput
+  }
+
+  export type EventUncheckedUpdateWithoutRegistrationsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    organizer?: StringFieldUpdateOperationsInput | string
+    attendees?: IntFieldUpdateOperationsInput | number
+    goingCount?: IntFieldUpdateOperationsInput | number
+    maybeCount?: IntFieldUpdateOperationsInput | number
+    notGoingCount?: IntFieldUpdateOperationsInput | number
+    hasTickets?: BoolFieldUpdateOperationsInput | boolean
+    requiresApproval?: BoolFieldUpdateOperationsInput | boolean
+    hasCapacity?: BoolFieldUpdateOperationsInput | boolean
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    capacity?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RegistrationCreateWithoutEventInput = {
+    fullName: string
+    email: string
+    contactNumber?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutRegistrationInput
+  }
+
+  export type RegistrationUncheckedCreateWithoutEventInput = {
+    id?: number
+    userId: number
+    fullName: string
+    email: string
+    contactNumber?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RegistrationCreateOrConnectWithoutEventInput = {
+    where: RegistrationWhereUniqueInput
+    create: XOR<RegistrationCreateWithoutEventInput, RegistrationUncheckedCreateWithoutEventInput>
+  }
+
+  export type RegistrationCreateManyEventInputEnvelope = {
+    data: RegistrationCreateManyEventInput | RegistrationCreateManyEventInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserCreateWithoutEventInput = {
@@ -4215,6 +6203,7 @@ export namespace Prisma {
     name?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    Registration?: RegistrationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEventInput = {
@@ -4223,11 +6212,28 @@ export namespace Prisma {
     name?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    Registration?: RegistrationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEventInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutEventInput, UserUncheckedCreateWithoutEventInput>
+  }
+
+  export type RegistrationUpsertWithWhereUniqueWithoutEventInput = {
+    where: RegistrationWhereUniqueInput
+    update: XOR<RegistrationUpdateWithoutEventInput, RegistrationUncheckedUpdateWithoutEventInput>
+    create: XOR<RegistrationCreateWithoutEventInput, RegistrationUncheckedCreateWithoutEventInput>
+  }
+
+  export type RegistrationUpdateWithWhereUniqueWithoutEventInput = {
+    where: RegistrationWhereUniqueInput
+    data: XOR<RegistrationUpdateWithoutEventInput, RegistrationUncheckedUpdateWithoutEventInput>
+  }
+
+  export type RegistrationUpdateManyWithWhereWithoutEventInput = {
+    where: RegistrationScalarWhereInput
+    data: XOR<RegistrationUpdateManyMutationInput, RegistrationUncheckedUpdateManyWithoutEventInput>
   }
 
   export type UserUpsertWithoutEventInput = {
@@ -4246,6 +6252,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Registration?: RegistrationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventInput = {
@@ -4254,6 +6261,7 @@ export namespace Prisma {
     name?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Registration?: RegistrationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type EventCreateManyUserInput = {
@@ -4267,12 +6275,27 @@ export namespace Prisma {
     timezone?: string | null
     location?: string | null
     organizer: string
-    attendees: number
+    attendees?: number
+    goingCount?: number
+    maybeCount?: number
+    notGoingCount?: number
     hasTickets?: boolean
     requiresApproval?: boolean
     hasCapacity?: boolean
     isFree?: boolean
     capacity?: string | null
+    bannerUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RegistrationCreateManyUserInput = {
+    id?: number
+    eventId: number
+    fullName: string
+    email: string
+    contactNumber?: string | null
+    status?: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -4288,13 +6311,18 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    goingCount?: IntFieldUpdateOperationsInput | number
+    maybeCount?: IntFieldUpdateOperationsInput | number
+    notGoingCount?: IntFieldUpdateOperationsInput | number
     hasTickets?: BoolFieldUpdateOperationsInput | boolean
     requiresApproval?: BoolFieldUpdateOperationsInput | boolean
     hasCapacity?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     capacity?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrations?: RegistrationUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateWithoutUserInput = {
@@ -4309,13 +6337,18 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    goingCount?: IntFieldUpdateOperationsInput | number
+    maybeCount?: IntFieldUpdateOperationsInput | number
+    notGoingCount?: IntFieldUpdateOperationsInput | number
     hasTickets?: BoolFieldUpdateOperationsInput | boolean
     requiresApproval?: BoolFieldUpdateOperationsInput | boolean
     hasCapacity?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     capacity?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    registrations?: RegistrationUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateManyWithoutUserInput = {
@@ -4330,11 +6363,90 @@ export namespace Prisma {
     location?: NullableStringFieldUpdateOperationsInput | string | null
     organizer?: StringFieldUpdateOperationsInput | string
     attendees?: IntFieldUpdateOperationsInput | number
+    goingCount?: IntFieldUpdateOperationsInput | number
+    maybeCount?: IntFieldUpdateOperationsInput | number
+    notGoingCount?: IntFieldUpdateOperationsInput | number
     hasTickets?: BoolFieldUpdateOperationsInput | boolean
     requiresApproval?: BoolFieldUpdateOperationsInput | boolean
     hasCapacity?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     capacity?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RegistrationUpdateWithoutUserInput = {
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    event?: EventUpdateOneRequiredWithoutRegistrationsNestedInput
+  }
+
+  export type RegistrationUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    eventId?: IntFieldUpdateOperationsInput | number
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RegistrationUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    eventId?: IntFieldUpdateOperationsInput | number
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RegistrationCreateManyEventInput = {
+    id?: number
+    userId: number
+    fullName: string
+    email: string
+    contactNumber?: string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RegistrationUpdateWithoutEventInput = {
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutRegistrationNestedInput
+  }
+
+  export type RegistrationUncheckedUpdateWithoutEventInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RegistrationUncheckedUpdateManyWithoutEventInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    userId?: IntFieldUpdateOperationsInput | number
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    contactNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

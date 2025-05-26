@@ -13,10 +13,15 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'GET') {
   $email = $_GET['email'] ?? null;
+  $id = $_GET['id'] ?? null;
+
   try {
     if ($email) {
       $stmt = $pdo->prepare("SELECT id, name, email FROM user WHERE email = :email");
       $stmt->execute([':email' => $email]);
+    } else if ($id) {
+      $stmt = $pdo->prepare("SELECT id, name, email FROM user WHERE id = :id");
+      $stmt->execute([':id' => $id]);
     } else {
       $stmt = $pdo->query("SELECT id, name, email FROM user");
     }

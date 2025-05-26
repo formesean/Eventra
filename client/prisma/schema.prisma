@@ -15,16 +15,34 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Event     Event[]
+  id           Int            @id @default(autoincrement())
+  email        String         @unique
+  name         String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Event        Event[]
+  Registration Registration[]
+}
+
+model Registration {
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  eventId       Int
+  fullName      String
+  email         String
+  contactNumber String?
+  status        String   @default("going") // going, maybe, not going
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+
+  @@unique([eventId, email])
 }
 
 model Event {
-  id               Int      @id @default(autoincrement())
+  id               Int            @id @default(autoincrement())
   userId           Int
   name             String
   description      String?
@@ -35,12 +53,17 @@ model Event {
   timezone         String?
   location         String?
   organizer        String
-  attendees        Int
-  hasTickets       Boolean  @default(false)
-  requiresApproval Boolean  @default(false)
-  hasCapacity      Boolean  @default(false)
-  isFree           Boolean  @default(true)
+  attendees        Int            @default(0)
+  goingCount       Int            @default(0)
+  maybeCount       Int            @default(0)
+  notGoingCount    Int            @default(0)
+  hasTickets       Boolean        @default(false)
+  requiresApproval Boolean        @default(false)
+  hasCapacity      Boolean        @default(false)
+  isFree           Boolean        @default(true)
   capacity         String?
+  bannerUrl        String?
+  registrations    Registration[]
 
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
