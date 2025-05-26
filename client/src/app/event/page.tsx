@@ -264,8 +264,8 @@ export default function EventPage() {
                 <div
                   className={`transition-all duration-300 ease-in-out ${
                     activeTab === "upcoming"
-                      ? "opacity-100"
-                      : "opacity-0 absolute"
+                      ? "opacity-100 relative"
+                      : "opacity-0 absolute pointer-events-none"
                   }`}
                 >
                   {events.upcoming.length > 0 ? (
@@ -282,7 +282,9 @@ export default function EventPage() {
                 {/* Past Events */}
                 <div
                   className={`transition-all duration-300 ease-in-out ${
-                    activeTab === "past" ? "opacity-100" : "opacity-0 absolute"
+                    activeTab === "past"
+                      ? "opacity-100 relative"
+                      : "opacity-0 absolute pointer-events-none"
                   }`}
                 >
                   {events.past.length > 0 ? (

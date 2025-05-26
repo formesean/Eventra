@@ -90,6 +90,13 @@ if ($method === 'GET') {
     $newStatus = $data['status'];
     $eventId = $currentRegistration['eventId'];
 
+    // Map status values to database column names
+    $statusColumnMap = [
+      'going' => 'goingCount',
+      'maybe' => 'maybeCount',
+      'not-going' => 'notGoingCount'
+    ];
+
     // Update registration status
     $updateQuery = $pdo->prepare("
       UPDATE registration
@@ -105,7 +112,7 @@ if ($method === 'GET') {
     // First, decrease the count for the old status
     $decreaseQuery = $pdo->prepare("
       UPDATE event
-      SET {$oldStatus}Count = {$oldStatus}Count - 1
+      SET {$statusColumnMap[$oldStatus]} = {$statusColumnMap[$oldStatus]} - 1
       WHERE id = :eventId
     ");
     $decreaseQuery->execute([':eventId' => $eventId]);
@@ -113,7 +120,7 @@ if ($method === 'GET') {
     // Then, increase the count for the new status
     $increaseQuery = $pdo->prepare("
       UPDATE event
-      SET {$newStatus}Count = {$newStatus}Count + 1
+      SET {$statusColumnMap[$newStatus]} = {$statusColumnMap[$newStatus]} + 1
       WHERE id = :eventId
     ");
     $increaseQuery->execute([':eventId' => $eventId]);

@@ -37,15 +37,13 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { userId, eventId, fullName, email, contactNumber } = body;
 
-    // Validate required fields
-    if (!userId || !eventId || !fullName || !email || !contactNumber) {
+    if (!userId || !eventId || !fullName || !email) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    // Call PHP registration endpoint
     const response = await fetch(`http://localhost/server/register.php`, {
       method: "POST",
       headers: {
@@ -59,6 +57,17 @@ export async function POST(request: Request) {
         contactNumber,
       }),
     });
+
+    const contentType = response.headers.get("content-type");
+
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await response.text();
+      console.error("Expected JSON, got:", text);
+      return NextResponse.json(
+        { message: "Unexpected response from server", raw: text },
+        { status: 500 }
+      );
+    }
 
     const data = await response.json();
 
