@@ -13,14 +13,30 @@ import {
   CardContent,
 } from "../../components/ui/card";
 import Login from "../_components/login";
+import { Button } from "../../components/ui/button";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+
+type EventItem = {
+  id: any;
+  title: any;
+  date: string;
+  day: string;
+  time: any;
+  organizer: any;
+  location: any;
+  attendees: any;
+  description: any;
+};
 
 export default function EventPage() {
   const { data: session } = useSession();
   const router = useRouter();
 
   const [activeTab, setActiveTab] = useState("upcoming");
-  const notificationsRef = useRef(null);
-  const [events, setEvents] = useState({ upcoming: [], past: [] });
+  const [events, setEvents] = useState<{
+    upcoming: EventItem[];
+    past: EventItem[];
+  }>({ upcoming: [], past: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,14 +53,14 @@ export default function EventPage() {
         const data = await res.json();
         if (Array.isArray(data)) {
           const now = new Date();
-          const upcoming = [];
-          const past = [];
+          const upcoming: EventItem[] = [];
+          const past: EventItem[] = [];
 
           data.forEach((event) => {
             const startDate = new Date(event.startDate);
             const endDate = event.endDate ? new Date(event.endDate) : null;
             const isUpcoming = endDate ? endDate >= now : startDate >= now;
-            const mapped = {
+            const mapped: EventItem = {
               id: event.id,
               title: event.name,
               date: startDate.toLocaleDateString(undefined, {
@@ -74,46 +90,35 @@ export default function EventPage() {
     if (session) fetchEvents();
   }, [session]);
 
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (
-        notificationsRef.current &&
-        !notificationsRef.current.contains(e.target) &&
-        !e.target.closest(".bell-icon")
-      ) {
-        setShowNotifications(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   if (!session) return null;
 
-  const EventCard = ({ event }) => (
-    <Card className="bg-gray-800 border-gray-700 hover:border-gray-600 transition-all duration-300">
-      <CardHeader>
-        <div className="text-gray-400 mb-1">
-          <span className="font-medium">{event.date}</span> · {event.day}
-        </div>
-        <div className="text-gray-400 text-sm mb-2">{event.time}</div>
-        <CardTitle className="text-white">{event.title}</CardTitle>
-        <CardDescription className="text-gray-400 mt-1">
-          By {event.organizer} <br /> {event.location}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-gray-300 mb-3">{event.description}</p>
-        <div className="flex items-center text-gray-400 text-sm">
-          <span className="font-medium text-white">Going</span>
-          <span className="ml-2">+{event.attendees}</span>
-        </div>
-      </CardContent>
-    </Card>
-  );
+  const EventCard = ({ event }: { event: EventItem }) => {
+    return (
+      <Link href={`/event/${event.id}?id=${event.id}`} className="block group">
+        <Card className="bg-gray-800 border-gray-700 hover:border-indigo-500 group-hover:shadow-lg transition-all duration-300 cursor-pointer">
+          <CardHeader>
+            <div className="text-gray-400 mb-1">
+              <span className="font-medium">{event.date}</span> · {event.day}
+            </div>
+            <div className="text-gray-400 text-sm mb-2">{event.time}</div>
+            <CardTitle className="text-white">{event.title}</CardTitle>
+            <CardDescription className="text-gray-400 mt-1">
+              By {event.organizer} <br /> {event.location}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-300 mb-3">{event.description}</p>
+            <div className="flex items-center text-gray-400 text-sm">
+              <span className="font-medium text-white">Going</span>
+              <span className="ml-2">+{event.attendees}</span>
+            </div>
+          </CardContent>
+        </Card>
+      </Link>
+    );
+  };
 
-  const EmptyState = ({ type }) => (
+  const EmptyState = ({ type }: { type: "upcoming" | "past" }) => (
     <Card className="bg-gray-800 border-gray-700 text-center">
       <CardContent className="py-8">
         <div className="mx-auto w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center mb-4">
@@ -160,14 +165,24 @@ export default function EventPage() {
       {/* Navigation */}
       <nav className="bg-transparent px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center max-w-7xl mx-auto">
-          <Link href="/" className="text-xl font-bold text-white">
-            Eventra
-          </Link>
+          <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              onClick={() => router.push("/")}
+              className="hover:cursor-pointer text-gray-400 hover:text-white hover:bg-gray-800/50 transition-colors"
+            >
+              <ArrowLeftIcon className="h-5 w-5 mr-2" />
+              Back to Home
+            </Button>
+            <Link href="/" className="text-xl font-bold text-white">
+              Eventra
+            </Link>
+          </div>
 
           {/* Action Buttons */}
           <div className="flex items-center space-x-6">
             <Link
-              href="/create_page"
+              href="/create"
               className="text-gray-300 hover:text-white text-sm font-medium flex items-center"
             >
               Create New

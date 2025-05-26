@@ -21,7 +21,7 @@ export default function Login() {
   return (
     <>
       <button
-        onClick={() => signIn("google", { callbackUrl: "/event_page" })}
+        onClick={() => signIn("google", { callbackUrl: "/event" })}
         className="px-4 py-1 text-sm bg-gray-800 border border-gray-600 rounded-full hover:bg-gray-700 transition hover:cursor-pointer"
       >
         Sign In

@@ -3,7 +3,6 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Login from "./_components/login";
-import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
@@ -17,7 +16,7 @@ const HomePage = () => {
       {/* Top-right navigation */}
       <div className="absolute top-4 right-6 flex items-center space-x-6 text-sm text-gray-300">
         <ClockDisplay />
-        <a href="/event_page" className="hover:underline">
+        <a href="/event" className="hover:underline">
           Explore Events
         </a>
         <Login />
@@ -42,9 +41,9 @@ const HomePage = () => {
           <Button
             onClick={() => {
               if (session) {
-                router.push("/create_page");
+                router.push("/create");
               } else {
-                signIn("google", { callbackUrl: "/create_page" });
+                signIn("google", { callbackUrl: "/create" });
               }
             }}
             className="hover:cursor-pointer bg-white text-black font-semibold px-6 py-3 rounded-md hover:bg-gray-300 transition shadow-lg"
