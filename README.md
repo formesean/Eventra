@@ -48,7 +48,7 @@ The frontend will be accessible at `http://localhost:3000`
 2. Open phpMyAdmin (http://localhost/phpmyadmin)
 3. Create a new database named `eventra`
 4. Import the database schema:
-   - Locate the `eventra.sql` file in the root project folder
+   - Locate the `eventra.sql` file in the `server` folder
    - In phpMyAdmin, select the `eventra` database
    - Click on the "Import" tab
    - Click "Choose File" and select the `eventra.sql` file
