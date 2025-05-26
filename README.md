@@ -1,6 +1,23 @@
 # Eventra - Event Management System
 
-A full-stack web application for managing events, built with Next.js (Frontend) and PHP (Backend) with MySQL database.
+A RSVP management web application that enables users to create and manage events, track participant responses, and send notifications, all within a clear, responsive interface. Designed with students and small organizations in mind, the platform streamlines event coordination by allowing users to register or log in, publish events, and monitor RSVP statuses in real time.
+
+## Tech Stack
+
+**Frontend:**
+- [Next.js](https://nextjs.org/) – React framework for server-side rendering and routing
+- [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework for styling
+- [shadcn/ui](https://ui.shadcn.com/) – Accessible, customizable component library built with Radix UI and Tailwind CSS
+
+**Backend:**
+- [PHP](https://www.php.net/) – For lightweight server-side API handling
+- [Prisma](https://www.prisma.io/) – ORM for database access in Node.js
+- [MySQL](https://www.mysql.com/) – Relational database
+
+**Dev Tools & Infrastructure:**
+- [XAMPP](https://www.apachefriends.org/) – Local development server for PHP and MySQL
+- [Node.js](https://nodejs.org/) – Runtime for executing JavaScript on the backend
+- [Git](https://git-scm.com/) – Version control
 
 ## Prerequisites
 
