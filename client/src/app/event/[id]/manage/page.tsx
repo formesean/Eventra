@@ -8,7 +8,6 @@ import {
   ClockIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  CheckIcon,
   ArrowLeftIcon,
 } from "@heroicons/react/24/outline";
 import { Button } from "~/components/ui/button";
@@ -28,10 +27,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
-import { useState, useEffect, useRef } from "react";
-import { createPortal } from "react-dom";
+import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { StatusSelect } from "~/app/_components/status-select";
 
 interface RSVP {
   id: number;
@@ -48,116 +47,6 @@ interface StatusSelectProps {
   className?: string;
 }
 
-function StatusSelect({
-  currentStatus,
-  onStatusChange,
-  className = "",
-}: StatusSelectProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
-  const statusOptions: {
-    value: RSVP["status"];
-    label: string;
-    color: string;
-  }[] = [
-    { value: "going", label: "Going", color: "text-green-400" },
-    { value: "maybe", label: "Maybe", color: "text-yellow-400" },
-    { value: "not-going", label: "Not Going", color: "text-gray-400" },
-  ];
-
-  const currentStatusOption = statusOptions.find(
-    (opt) => opt.value === currentStatus
-  );
-
-  const updatePosition = () => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      const spaceBelow = window.innerHeight - rect.bottom;
-      const top = spaceBelow >= 120 ? rect.bottom + 8 : rect.top - 120;
-
-      setPosition({
-        top,
-        left: rect.left,
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      updatePosition();
-      window.addEventListener("scroll", updatePosition);
-      window.addEventListener("resize", updatePosition);
-    }
-    return () => {
-      window.removeEventListener("scroll", updatePosition);
-      window.removeEventListener("resize", updatePosition);
-    };
-  }, [isOpen]);
-
-  return (
-    <div className="relative">
-      <button
-        ref={buttonRef}
-        onClick={() => {
-          setIsOpen(!isOpen);
-          if (!isOpen) {
-            updatePosition();
-          }
-        }}
-        className={`${currentStatusOption?.color} hover:opacity-80 transition-opacity text-sm font-medium hover:cursor-pointer px-2 rounded-full border border-current ${className}`}
-      >
-        {currentStatusOption?.label}
-      </button>
-
-      {isOpen &&
-        createPortal(
-          <div
-            className="fixed z-50"
-            style={{
-              top: `${position.top}px`,
-              left: `${position.left}px`,
-            }}
-          >
-            <div
-              className="w-48 rounded-xl shadow-lg bg-gray-800/90 backdrop-blur-sm border border-gray-700 overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="py-1">
-                {statusOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => {
-                      onStatusChange(option.value);
-                      setIsOpen(false);
-                    }}
-                    className={`w-full text-left px-4 py-2 text-sm hover:bg-purple-500/20 focus:bg-purple-500/20 flex items-center justify-between ${option.color} transition-colors`}
-                  >
-                    <span className="font-medium">{option.label}</span>
-                    {currentStatus === option.value && (
-                      <CheckIcon className="h-4 w-4 text-purple-400" />
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>,
-          document.body
-        )}
-
-      {isOpen &&
-        createPortal(
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setIsOpen(false)}
-          />,
-          document.body
-        )}
-    </div>
-  );
-}
-
 export default function RSVPList() {
   const router = useRouter();
   const params = useParams();
@@ -170,7 +59,6 @@ export default function RSVPList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [eventData, setEventData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isHost, setIsHost] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const itemsPerPage = 10;
 
@@ -214,7 +102,6 @@ export default function RSVPList() {
               const data = await response.json();
               const organizerEmail = data[0].email;
               const isUserHost = session?.user?.email === organizerEmail;
-              setIsHost(isUserHost);
 
               if (!isUserHost) {
                 router.push(`/event/${eventId}`);
@@ -247,6 +134,30 @@ export default function RSVPList() {
 
       if (data.success && data.attendees) {
         setRSVPs(data.attendees);
+
+        // Initialize counts from the RSVPs data
+        const counts = data.attendees.reduce(
+          (acc: any, rsvp: RSVP) => {
+            // Map the status to the correct count property
+            const statusKey =
+              rsvp.status === "not-going"
+                ? "notGoingCount"
+                : `${rsvp.status}Count`;
+            acc[statusKey] = (acc[statusKey] || 0) + 1;
+            return acc;
+          },
+          {
+            goingCount: 0,
+            maybeCount: 0,
+            notGoingCount: 0,
+            attendees: data.attendees.length,
+          }
+        );
+
+        setEventData((prev: any) => ({
+          ...prev,
+          ...counts,
+        }));
       } else {
         console.error("Failed to fetch attendees:", data.error);
       }
@@ -397,19 +308,47 @@ export default function RSVPList() {
             (r) => r.id === confirmDialog.rsvpId
           )?.status;
           if (oldStatus) {
-            setEventData((prev: any) => ({
-              ...prev,
-              [`${oldStatus}Count`]: (prev[`${oldStatus}Count`] || 0) - 1,
-              [`${confirmDialog.newStatus}Count`]:
-                (prev[`${confirmDialog.newStatus}Count`] || 0) + 1,
-            }));
+            setEventData((prev: any) => {
+              const newData = { ...prev };
+              // Map the status to the correct count property
+              const oldStatusKey =
+                oldStatus === "not-going"
+                  ? "notGoingCount"
+                  : `${oldStatus}Count`;
+              const newStatusKey =
+                confirmDialog.newStatus === "not-going"
+                  ? "notGoingCount"
+                  : `${confirmDialog.newStatus}Count`;
+
+              // Decrement old status count
+              newData[oldStatusKey] = Math.max(
+                0,
+                (prev[oldStatusKey] || 0) - 1
+              );
+              // Increment new status count
+              newData[newStatusKey] = (prev[newStatusKey] || 0) + 1;
+              return newData;
+            });
           }
         }
       } catch (error) {
         console.error("Error updating status:", error);
-        // You might want to show an error toast here
       }
     } else if (confirmDialog.type === "delete" && confirmDialog.rsvpId) {
+      const rsvpToDelete = rsvps.find((r) => r.id === confirmDialog.rsvpId);
+      if (rsvpToDelete && eventData) {
+        // Update event data counts before removing the RSVP
+        setEventData((prev: any) => {
+          const newData = { ...prev };
+          const statusKey =
+            rsvpToDelete.status === "not-going"
+              ? "notGoingCount"
+              : `${rsvpToDelete.status}Count`;
+          newData[statusKey] = Math.max(0, (prev[statusKey] || 0) - 1);
+          newData.attendees = Math.max(0, (prev.attendees || 0) - 1);
+          return newData;
+        });
+      }
       setRSVPs((prev) =>
         prev.filter((rsvp) => rsvp.id !== confirmDialog.rsvpId)
       );

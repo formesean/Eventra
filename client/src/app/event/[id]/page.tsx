@@ -14,19 +14,47 @@ import { useEffect, useState, use } from "react";
 import ShareEvent from "~/app/_components/share-event";
 import RegistrationModal from "~/app/_components/registration-modal";
 import { useRouter } from "next/navigation";
+import { StatusSelect } from "~/app/_components/status-select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "~/components/ui/dialog";
+
+interface Event {
+  id: string;
+  name: string;
+  description: string;
+  organizer: string;
+  startDate: string;
+  startTime: string;
+  timezone: string;
+  location: string;
+  bannerUrl?: string;
+  userId: number;
+  goingCount: number;
+  attendees: number;
+}
 
 export default function ViewEventPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const [event, setEvent] = useState<any>(null);
+  const [event, setEvent] = useState<Event | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isHost, setIsHost] = useState(false);
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [isCancelOpen, setIsCancelOpen] = useState(false);
   const [userId, setUserId] = useState<number | null>(null);
   const [isRegistered, setIsRegistered] = useState(false);
   const [isRegistrationChecked, setIsRegistrationChecked] = useState(false);
+  const [userStatus, setUserStatus] = useState<"going" | "maybe" | "not-going">(
+    "going"
+  );
   const { data: session } = useSession();
   const resolvedParams = use(params);
   const router = useRouter();
@@ -86,6 +114,9 @@ export default function ViewEventPage({
             );
             const registrationData = await registrationResponse.json();
             setIsRegistered(registrationData.isRegistered);
+            if (registrationData.registration) {
+              setUserStatus(registrationData.registration.status || "going");
+            }
           }
         } catch (err) {
           console.error("Error fetching user ID:", err);
@@ -99,6 +130,33 @@ export default function ViewEventPage({
 
     fetchUserId();
   }, [session, resolvedParams.id]);
+
+  const handleStatusChange = async (
+    newStatus: "going" | "maybe" | "not-going"
+  ) => {
+    if (!userId || !session) return;
+
+    try {
+      const response = await fetch("/api/register/status", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          eventId: resolvedParams.id,
+          status: newStatus,
+        }),
+      });
+
+      if (response.ok) {
+        setUserStatus(newStatus);
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error("Error updating status:", err);
+    }
+  };
 
   if (error) {
     return <div className="text-red-500">Error: {error}</div>;
@@ -360,7 +418,7 @@ export default function ViewEventPage({
               {/* Sidebar */}
               <div className="space-y-6">
                 {/* Registration Card */}
-                <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl px-6 py-9 border border-gray-700 sticky top-8">
+                <div className="flex flex-col bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700 sticky top-8">
                   <div className="text-center mb-6">
                     <div className="text-3xl font-bold text-white mb-1">
                       Free
@@ -369,6 +427,15 @@ export default function ViewEventPage({
                       Registration required
                     </p>
                   </div>
+
+                  {isRegistered && (
+                    <div className="mb-4 flex justify-center">
+                      <StatusSelect
+                        currentStatus={userStatus}
+                        onStatusChange={handleStatusChange}
+                      />
+                    </div>
+                  )}
 
                   <Button
                     onClick={() =>
@@ -392,10 +459,22 @@ export default function ViewEventPage({
                       : "Sign In"}
                   </Button>
 
+                  {isRegistered && (
+                    <button
+                      onClick={() => setIsCancelOpen(true)}
+                      className="hover:cursor-pointer mt-2 text-sm text-gray-400 hover:text-red-400 underline transition-colors"
+                    >
+                      Cancel Registration
+                    </button>
+                  )}
+
                   <div className="mt-4 pt-4 border-t border-gray-700">
-                    <div className="flex items-center justify-end text-sm">
+                    <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-400">
-                        {event.attendees} going
+                        {event.goingCount} going
+                      </span>
+                      <span className="text-gray-400">
+                        {event.attendees} interested
                       </span>
                     </div>
                   </div>
@@ -420,6 +499,50 @@ export default function ViewEventPage({
             eventId={event.id}
             userId={userId ?? 0}
           />
+
+          <Dialog open={isCancelOpen} onOpenChange={setIsCancelOpen}>
+            <DialogContent className="bg-gray-800 border-gray-700">
+              <DialogHeader>
+                <DialogTitle className="text-white">
+                  Cancel Registration
+                </DialogTitle>
+                <DialogDescription className="text-gray-400">
+                  Are you sure you want to cancel your registration for this
+                  event? This action cannot be undone.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="flex gap-2 justify-end mt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsCancelOpen(false)}
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:cursor-pointer"
+                >
+                  Keep Registration
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    fetch("/api/register", {
+                      method: "DELETE",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        userId,
+                        eventId: resolvedParams.id,
+                      }),
+                    }).then(() => {
+                      setIsCancelOpen(false);
+                      window.location.reload();
+                    });
+                  }}
+                  className="bg-red-600 hover:bg-red-700 hover:cursor-pointer"
+                >
+                  Cancel Registration
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </>
       )}
     </div>

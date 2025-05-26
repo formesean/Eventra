@@ -37,15 +37,13 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { userId, eventId, fullName, email, contactNumber } = body;
 
-    // Validate required fields
-    if (!userId || !eventId || !fullName || !email || !contactNumber) {
+    if (!userId || !eventId || !fullName || !email) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
       );
     }
 
-    // Call PHP registration endpoint
     const response = await fetch(`http://localhost/server/register.php`, {
       method: "POST",
       headers: {
@@ -59,6 +57,17 @@ export async function POST(request: Request) {
         contactNumber,
       }),
     });
+
+    const contentType = response.headers.get("content-type");
+
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await response.text();
+      console.error("Expected JSON, got:", text);
+      return NextResponse.json(
+        { message: "Unexpected response from server", raw: text },
+        { status: 500 }
+      );
+    }
 
     const data = await response.json();
 
@@ -78,6 +87,61 @@ export async function POST(request: Request) {
     console.error("Registration error:", error);
     return NextResponse.json(
       { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const data = await request.json();
+    const { userId, eventId } = data;
+
+    if (!userId || !eventId) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Missing required fields: userId and eventId",
+        },
+        { status: 400 }
+      );
+    }
+
+    const response = await fetch("http://localhost/server/register.php", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ userId, eventId }),
+    });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      console.error("Non-JSON response:", await response.text());
+      return NextResponse.json(
+        { success: false, error: "Invalid response from server" },
+        { status: 500 }
+      );
+    }
+
+    const responseData = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: responseData.error || "Failed to cancel registration",
+        },
+        { status: response.status }
+      );
+    }
+
+    return NextResponse.json(responseData);
+  } catch (error) {
+    console.error("Error canceling registration:", error);
+    return NextResponse.json(
+      { success: false, error: "Internal server error" },
       { status: 500 }
     );
   }

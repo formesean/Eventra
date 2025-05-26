@@ -70,7 +70,9 @@ export default function RegistrationModal({
           eventId,
           fullName: formData.fullName,
           email: formData.email,
-          contactNumber: formData.contactNumber,
+          ...(formData.contactNumber && {
+            contactNumber: formData.contactNumber,
+          }),
         }),
       });
 
