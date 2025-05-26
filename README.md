@@ -35,13 +35,6 @@ Before you begin, ensure you have the following installed:
 
 3. Contact the developer to obtain the `.env` file for the frontend configuration
 
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-The frontend will be accessible at `http://localhost:3000`
-
 ## Database Setup
 
 1. Open XAMPP Control Panel and start MySQL
