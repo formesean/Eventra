@@ -16,6 +16,7 @@ import { DateTimePicker } from "../../components/ui/datetime-picker";
 import { Separator } from "../../components/ui/separator";
 import { toast } from "sonner";
 import EventBanner from "../_components/event-banner";
+import { sendEmail } from "../../lib/sendEmail";
 
 export default function CreateEventPage() {
   const { data: session } = useSession();
@@ -194,8 +195,50 @@ export default function CreateEventPage() {
           : "Event created successfully!";
         setMessage(successMessage as any);
         toast.success(successMessage);
+
+        const eventId = data.event_id || editEventId;
+        if (!eventId) {
+          console.error("No event ID received from server");
+          toast.error("Failed to get event ID");
+          return;
+        }
+
+        // Send confirmation email to organizer
+        try {
+          await sendEmail(
+            `${eventName} ${isEditing ? "Updated" : "Created"}`,
+            organizer,
+            `
+              Your event has been ${
+                isEditing ? "updated" : "created"
+              } successfully!
+
+              Event Details:
+              Name: ${eventName}
+              Description: ${description}
+              Start Date: ${startDate.toLocaleDateString()}
+              Start Time: ${startTime}
+              End Date: ${endDate.toLocaleDateString()}
+              End Time: ${endTime}
+              Location: ${location}
+              Timezone: ${timezone}
+              Capacity: ${capacity}
+              Requires Approval: ${requiresApproval ? "Yes" : "No"}
+              Has Tickets: ${hasTickets ? "Yes" : "No"}
+              Is Free: ${isFree ? "Yes" : "No"}
+
+              You can view your event at: http://localhost:3000/event/${eventId}?id=${eventId}
+            `,
+            session?.user?.email || ""
+          );
+        } catch (emailError) {
+          console.error("Error sending confirmation email:", emailError);
+        }
+
         setTimeout(() => {
-          router.push(isEditing ? `/event/${editEventId}` : "/event");
+          router.push(
+            isEditing ? `/event/${editEventId}` : `/event/${eventId}`
+          );
         }, 2000);
       } else {
         const errorMessage = isEditing
@@ -204,10 +247,10 @@ export default function CreateEventPage() {
         const errorDetails = data.error || JSON.stringify(data);
         setMessage(`${errorMessage}: ${errorDetails}` as any);
         toast.error(`${errorMessage}: ${errorDetails}`);
-        console.error("Error response:", data); // Debug log
+        console.error("Error response:", data);
       }
     } catch (error: unknown) {
-      console.error("Request error:", error); // Debug log
+      console.error("Request error:", error);
       if (error instanceof Error) {
         setMessage(`Error: ${error.message}` as any);
         toast.error(`Error: ${error.message}`);
