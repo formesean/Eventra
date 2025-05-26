@@ -370,45 +370,67 @@ export default function RSVPList() {
         console.error("Error updating status:", error);
       }
     } else if (confirmDialog.type === "delete" && confirmDialog.rsvpId) {
-      const rsvpToDelete = rsvps.find((r) => r.id === confirmDialog.rsvpId);
-      if (rsvpToDelete && eventData) {
-        // Send email notification about removal
-        try {
-          await sendEmail(
-            `Removed from ${eventData.name}`,
-            rsvpToDelete.name,
-            `
-              You have been removed from the RSVP list for ${eventData.name}.
+      try {
+        const response = await fetch("/api/attendee", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            registrationId: confirmDialog.rsvpId,
+          }),
+        });
 
-              Event Details:
-              Name: ${eventData.name}
-              Date: ${new Date(eventData.startDate).toLocaleDateString()}
-              Time: ${eventData.startTime}
-              Location: ${eventData.location}
+        const data = await response.json();
 
-              If you believe this was done in error, please contact the event organizer.
-            `,
-            rsvpToDelete.email
-          );
-        } catch (emailError) {
-          console.error("Error sending removal email:", emailError);
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to delete registration");
         }
 
-        // Update event data counts before removing the RSVP
-        setEventData((prev: any) => {
-          const newData = { ...prev };
-          const statusKey =
-            rsvpToDelete.status === "not-going"
-              ? "notGoingCount"
-              : `${rsvpToDelete.status}Count`;
-          newData[statusKey] = Math.max(0, (prev[statusKey] || 0) - 1);
-          newData.attendees = Math.max(0, (prev.attendees || 0) - 1);
-          return newData;
-        });
+        const rsvpToDelete = rsvps.find((r) => r.id === confirmDialog.rsvpId);
+        if (rsvpToDelete && eventData) {
+          // Send email notification about removal
+          try {
+            await sendEmail(
+              `Removed from ${eventData.name}`,
+              rsvpToDelete.name,
+              `
+                You have been removed from the RSVP list for ${eventData.name}.
+
+                Event Details:
+                Name: ${eventData.name}
+                Date: ${new Date(eventData.startDate).toLocaleDateString()}
+                Time: ${eventData.startTime}
+                Location: ${eventData.location}
+
+                If you believe this was done in error, please contact the event organizer.
+              `,
+              rsvpToDelete.email
+            );
+          } catch (emailError) {
+            console.error("Error sending removal email:", emailError);
+          }
+
+          // Update event data counts
+          setEventData((prev: any) => {
+            const newData = { ...prev };
+            const statusKey =
+              rsvpToDelete.status === "not-going"
+                ? "notGoingCount"
+                : `${rsvpToDelete.status}Count`;
+            newData[statusKey] = Math.max(0, (prev[statusKey] || 0) - 1);
+            newData.attendees = Math.max(0, (prev.attendees || 0) - 1);
+            return newData;
+          });
+        }
+
+        // Remove the RSVP from the list
+        setRSVPs((prev) =>
+          prev.filter((rsvp) => rsvp.id !== confirmDialog.rsvpId)
+        );
+      } catch (error) {
+        console.error("Error deleting registration:", error);
       }
-      setRSVPs((prev) =>
-        prev.filter((rsvp) => rsvp.id !== confirmDialog.rsvpId)
-      );
     }
 
     setConfirmDialog({

@@ -6,6 +6,7 @@ import {
   CalendarIcon,
   UserGroupIcon,
   ArrowLeftIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
 import { Button } from "~/components/ui/button";
 import EventBanner from "~/app/_components/event-banner";
@@ -49,6 +50,7 @@ export default function ViewEventPage({
   const [isHost, setIsHost] = useState(false);
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
   const [isCancelOpen, setIsCancelOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [userId, setUserId] = useState<number | null>(null);
   const [isRegistered, setIsRegistered] = useState(false);
   const [isRegistrationChecked, setIsRegistrationChecked] = useState(false);
@@ -385,7 +387,7 @@ export default function ViewEventPage({
                     <h3 className="text-xl font-semibold text-white mb-4">
                       Manage
                     </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <Button
                         className="bg-indigo-600 hover:bg-indigo-700 text-white hover:cursor-pointer justify-start"
                         onClick={() => {
@@ -409,6 +411,13 @@ export default function ViewEventPage({
                       >
                         <PencilIcon className="h-4 w-4 mr-2" />
                         Edit Event Details
+                      </Button>
+                      <Button
+                        className="bg-red-600 hover:bg-red-700 text-white hover:cursor-pointer justify-start"
+                        onClick={() => setIsDeleteOpen(true)}
+                      >
+                        <TrashIcon className="h-4 w-4 mr-2" />
+                        Delete Event
                       </Button>
                     </div>
                   </div>
@@ -539,6 +548,51 @@ export default function ViewEventPage({
                   className="bg-red-600 hover:bg-red-700 hover:cursor-pointer"
                 >
                   Cancel Registration
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+            <DialogContent className="bg-gray-800 border-gray-700">
+              <DialogHeader>
+                <DialogTitle className="text-white">Delete Event</DialogTitle>
+                <DialogDescription className="text-gray-400">
+                  Are you sure you want to delete this event? This action cannot
+                  be undone.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter className="flex gap-2 justify-end mt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDeleteOpen(false)}
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:cursor-pointer"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={async () => {
+                    try {
+                      const response = await fetch(
+                        `/api/event?id=${event.id}`,
+                        {
+                          method: "DELETE",
+                        }
+                      );
+
+                      if (response.ok) {
+                        router.push("/event");
+                      } else {
+                        console.error("Failed to delete event");
+                      }
+                    } catch (error) {
+                      console.error("Error deleting event:", error);
+                    }
+                  }}
+                  className="bg-red-600 hover:bg-red-700 hover:cursor-pointer"
+                >
+                  Delete Event
                 </Button>
               </DialogFooter>
             </DialogContent>

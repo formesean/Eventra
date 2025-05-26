@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 26, 2025 at 12:10 PM
+-- Generation Time: May 26, 2025 at 02:48 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -59,7 +59,7 @@ CREATE TABLE `event` (
 
 INSERT INTO `event` (`id`, `userId`, `name`, `description`, `startDate`, `endDate`, `location`, `createdAt`, `updatedAt`, `attendees`, `organizer`, `capacity`, `endTime`, `hasCapacity`, `hasTickets`, `isFree`, `requiresApproval`, `startTime`, `timezone`, `bannerUrl`, `goingCount`, `maybeCount`, `notGoingCount`) VALUES
 (6, 2, 'RoboSports', 'Robotics Competition', '2025-05-24 23:00:00.000', '2025-05-25 08:00:00.000', 'CTU Danao', '2025-05-24 17:33:08.791', '0000-00-00 00:00:00.000', 1, 'Sean Aguilar', 'Unlimited', '04:00 PM', 1, 0, 1, 0, '07:00 AM', 'GMT+08:00 Manila', '/stock-banner-1.jpg', 1, 0, 0),
-(20, 2, 'Formula 1 Aramco Gran Premio De España 2025 - Qualifying', 'Formula 1 Aramco Gran Premio De España 2025 - Qualifying', '2025-05-30 06:00:00.000', '2025-05-30 07:00:00.000', 'Spain', '2025-05-25 22:39:38.374', '0000-00-00 00:00:00.000', 1, 'Sean Aguilar', 'Unlimited', '11:39 PM', 1, 0, 1, 0, '10:00 PM', 'GMT+08:00 Manila', '/stock-banner-4.jpg', 1, 0, 0);
+(21, 2, 'Formula 1 Aramco Gran Premio De España 2025 - Qualifying', 'Formula 1 Aramco Gran Premio De España 2025 - Qualifying', '2025-05-31 14:00:00.000', '2025-05-31 15:00:00.000', 'Circuit de Barcelona-Catalunya', '2025-05-26 20:46:21.368', '0000-00-00 00:00:00.000', 1, 'Sean Aguilar', 'Unlimited', '09:44 PM', 1, 1, 1, 0, '10:00 PM', 'GMT+08:00 Manila', '/stock-banner-4.jpg', 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -85,7 +85,7 @@ CREATE TABLE `registration` (
 
 INSERT INTO `registration` (`id`, `userId`, `eventId`, `fullName`, `email`, `contactNumber`, `status`, `createdAt`, `updatedAt`) VALUES
 (14, 3, 6, 'Sean Karl Tyrese G. Aguilar', '22101612@usc.edu.ph', NULL, 'going', '2025-05-26 15:46:41.000', '2025-05-26 15:46:41.000'),
-(16, 3, 20, 'Lewis Hamilton', '22101612@usc.edu.ph', '09150698943', 'going', '2025-05-26 17:00:38.000', '2025-05-26 18:10:11.000');
+(17, 3, 21, 'Lewis Hamilton', '22101612@usc.edu.ph', NULL, 'going', '2025-05-26 20:47:47.000', '2025-05-26 20:47:47.000');
 
 -- --------------------------------------------------------
 
@@ -182,13 +182,13 @@ ALTER TABLE `_prisma_migrations`
 -- AUTO_INCREMENT for table `event`
 --
 ALTER TABLE `event`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `registration`
 --
 ALTER TABLE `registration`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `user`
