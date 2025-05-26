@@ -17,7 +17,7 @@ Before you begin, ensure you have the following installed:
 1. Start XAMPP Control Panel and start Apache and MySQL services
 2. Navigate to your XAMPP installation directory (typically `C:\xampp` on Windows)
 3. Copy the entire `server` folder to the `htdocs` directory
-4. The backend API will be accessible at `http://localhost/Eventra/server/`
+4. The backend API will be accessible at `http://localhost/server/`
 
 ### Frontend Setup (Next.js)
 
